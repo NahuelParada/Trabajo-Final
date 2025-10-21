@@ -23,7 +23,5 @@ public class Persona {
         this.edad = edad;
     }
 
-    public void metodox(){
-
-    }
+    public void
 }
