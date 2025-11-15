@@ -14,6 +14,6 @@ public class Recepcionista extends Usuario {
         this.id = contador++;
         this.turno = turno;
     }
-
+    /// Metodos
 
 }
