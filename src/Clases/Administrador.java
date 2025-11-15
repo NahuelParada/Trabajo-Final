@@ -4,38 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Administrador extends Usuario{
+    /// Atributos
+    public static int contador = 0;
+    private int id;
 
-    private List<String> permisos;
-    private List<String> sectores;
-
+    /// Constructor
     public Administrador(String nombre, String contraseña) {
         super(nombre, contraseña);
-        permisos = new ArrayList<String>();
-        sectores = new ArrayList<String>();
+        this.id = contador++;
     }
 
-    public List<String> getPermisos() {
-        return permisos;
-    }
-
-    public void setPermisos(List<String> permisos) {
-        this.permisos = permisos;
-    }
-
-    public List<String> getSectores() {
-        return sectores;
-    }
-
-    public void setSectores(List<String> sectores) {
-        this.sectores = sectores;
-    }
-
-    @Override
-    public String toString() {
-        return "Administrador{" +
-                "nombre=" + super.getNombre() +
-                "permisos=" + getPermisos() +
-                ", sectores=" + getSectores() +
-                '}';
-    }
 }

@@ -1,6 +1,7 @@
 package Clases;
 
 public class Pasajero {
+    /// Atributos
     private String dni;
     private String nombre;
     private String apellido;
@@ -9,6 +10,7 @@ public class Pasajero {
     private String origen;
     private String domicilio;
 
+    /// Constructor
     public Pasajero(String dni, String nombre, String apellido, String gmail, String telefono, String origen, String domicilio) {
         this.dni = dni;
         this.nombre = nombre;

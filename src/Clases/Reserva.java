@@ -18,7 +18,7 @@ public class Reserva {
     private Pasajero pasajero;
     private Habitacion habitacion;
 
-    /// RESERVA
+    /// Constructor
 
     public Reserva(MetodoPago pago, int anio, int mes, int dia, Pasajero pasajeroReserva, Habitacion habitacionReserva) {
         idReserva = contador++;

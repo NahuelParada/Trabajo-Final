@@ -3,10 +3,11 @@ package Clases;
 import java.util.Objects;
 
 public abstract class Usuario {
-
+    /// Atributos
     String nombre;
     String contraseña;
 
+    /// Constructor
     public Usuario(String nombre, String contraseña) {
         this.nombre = nombre;
         this.contraseña = contraseña;
