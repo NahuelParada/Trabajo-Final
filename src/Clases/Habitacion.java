@@ -6,9 +6,9 @@ import Enums.tipoHabitacion;
 public class Habitacion {
     private int numHabitacion;
     private tipoHabitacion tipo;
-    private estadoHabitacion estado;
+    private EstadoHabitacion estado;
 
-    public Habitacion(int numHabitacion, tipoHabitacion tipo, estadoHabitacion estado) {
+    public Habitacion(int numHabitacion, tipoHabitacion tipo, EstadoHabitacion estado) {
         this.numHabitacion = numHabitacion;
         this.tipo = tipo;
         this.estado = estado;

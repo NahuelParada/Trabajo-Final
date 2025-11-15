@@ -1,13 +1,13 @@
 package Enums;
 
-public enum estadoHabitacion {
-    OCUPADO("OCUPADA"),
+public enum EstadoHabitacion {
+    OCUPADA("OCUPADA"),
     LIBRE("LIBRE"),
     MANTENIMIENTO("EN MANTENIMIENTO");
 
     public final String estado;
 
-    estadoHabitacion (String estado) {
+    EstadoHabitacion (String estado) {
        this.estado = estado;
     }
 
