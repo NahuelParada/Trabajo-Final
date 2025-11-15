@@ -16,4 +16,8 @@ public class Recepcionista extends Usuario {
     }
     /// Metodos
 
+    public int getId() {
+        return id;
+    }
+
 }
