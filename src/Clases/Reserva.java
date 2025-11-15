@@ -1,7 +1,7 @@
 package Clases;
 import Enums.MetodoPago;
-import Enums.estadoHabitacion;
-import Enums.tipoHabitacion;
+import Enums.EstadoHabitacion;
+import Enums.TipoHabitacion;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -20,13 +20,13 @@ public class Reserva {
 
     /// RESERVA
 
-    public Reserva(MetodoPago pago, int anio, int mes, int dia, Pasajero pasajeroReserva, Habitacion habitacionReserva, String dni, String nombre, String apellido, String gmail, String telefono, String origen, String domicilio, int numHabitacion, tipoHabitacion tipo, estadoHabitacion estado) {
+    public Reserva(MetodoPago pago, int anio, int mes, int dia, Pasajero pasajeroReserva, Habitacion habitacionReserva) {
         idReserva = contador++;
         this.pago = pago;
         this.fechaInicio = LocalDate.now();
         this.fechaFin = LocalDate.of(anio, mes, dia);
-        this.pasajero = new Pasajero(dni, nombre, apellido, gmail, telefono, origen, domicilio);
-        this.habitacion = new Habitacion(numHabitacion, tipo, estado);
+        this.pasajero = pasajeroReserva;
+        this.habitacion = habitacionReserva;
     }
 
     public int getIdReserva() {

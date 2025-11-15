@@ -1,13 +1,13 @@
 package Enums;
 
-public enum tipoHabitacion {
+public enum TipoHabitacion {
     ESTANDAR("ESTANDAR"),
     ESTANDARPLUS("ESTANDAR PLUS"),
     SUIT("SUIT");
 
     private final String tipo;
 
-    tipoHabitacion(String tipo) {
+    TipoHabitacion(String tipo) {
         this.tipo = tipo;
     }
 
