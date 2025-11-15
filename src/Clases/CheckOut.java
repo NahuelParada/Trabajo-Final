@@ -13,26 +13,13 @@ public class CheckOut {
 
     /// CONSTRUCTOR
 
-    public CheckOut() {
+    public CheckOut(Reserva reserva) {
         this.idCheckOut = contador++;
         this.fecha = LocalDate.now();
-    }
-
-    public void setReserva(Reserva reserva) {
         this.reserva = reserva;
     }
 
-    /// METODOS
 
-    public void VincularReserva(int id)
-    {
-        Reserva r1 = null;
-        for (Reserva R : lista){
-            if (R.getIdReserva() == id){
-                r1 = R;
-                setReserva(r1);
-            }
-        }
-    }
+
 
 }
