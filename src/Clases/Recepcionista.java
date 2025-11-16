@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Recepcionista extends Usuario {
     /// Atributos
-    public static int contador = 0;
+    public static int contador = 1;
     private int id;
     private Turno turno;
 
