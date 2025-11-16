@@ -50,4 +50,18 @@ public class Reserva implements Identificador {
     public int getIdentificador() {
         return this.idReserva;
     }
+
+    /// ToString
+
+    @Override
+    public String toString() {
+        return "Información de reserva: \n" +
+                "-idReserva: " + idReserva + "\n" +
+                "-pago: " + pago + "\n" +
+                "-fechaInicio: " + fechaInicio + "\n" +
+                "-fechaFin: " + fechaFin + "\n" +
+                "-pasajero: " + pasajero + "\n" +
+                "-habitacion: " + habitacion;
+    }
+
 }

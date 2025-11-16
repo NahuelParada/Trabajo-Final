@@ -21,4 +21,19 @@ public class Pasajero {
         this.domicilio = domicilio;
     }
 
+
+    ///  ToString
+
+    @Override
+    public String toString() {
+        return "Información de pasajero: \n" +
+                "  -dni: '" + dni + "'\n" +
+                "  -nombre: '" + nombre + "'\n" +
+                "  -apellido: '" + apellido + "'\n" +
+                "  -gmail: '" + gmail + "'\n" +
+                "  -telefono: '" + telefono + "'\n" +
+                "  -origen: '" + origen + "'\n" +
+                "  -domicilio: '" + domicilio + "'" +
+                " ";
+    }
 }

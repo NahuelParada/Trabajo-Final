@@ -19,7 +19,13 @@ public class CheckOut {
         this.reserva = reserva;
     }
 
+    /// ToString
 
-
-
+    @Override
+    public String toString() {
+        return "Información de Check-Out: \n" +
+                "-idCheckOut: " + idCheckOut + "\n" +
+                "-fecha: " + fecha + "\n" +
+                "-reserva: " + reserva;
+    }
 }
