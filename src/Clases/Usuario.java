@@ -12,7 +12,7 @@ public abstract class Usuario {
         this.nombre = nombre;
         this.contraseña = contraseña;
     }
-
+    /// Metodos
     public String getNombre() {
         return nombre;
     }
@@ -46,7 +46,7 @@ public abstract class Usuario {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Usuario usuario)) return false;
-        return Objects.equals(nombre, usuario.nombre) && Objects.equals(contraseña, usuario.contraseña);
+        return Objects.equals(nombre, usuario.nombre);
     }
 
     @Override
@@ -54,10 +54,4 @@ public abstract class Usuario {
         return Objects.hash(nombre, contraseña);
     }
 
-    @Override
-    public String toString() {
-        return "USUARIO: \n" +
-                "-Nombre: " + nombre + "\n"+
-                "-Contraseña: " + contraseña + "\n";
-    }
 }
