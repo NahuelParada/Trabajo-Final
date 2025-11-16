@@ -18,18 +18,6 @@ public class Recepcionista extends Usuario {
         this.turno = turno;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public Turno getTurno() {
-        return turno;
-    }
-
-    public void setTurno(Turno turno) {
-        this.turno = turno;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Recepcionista that)) return false;
