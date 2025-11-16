@@ -2,11 +2,12 @@ package Clases;
 import Enums.MetodoPago;
 import Enums.EstadoHabitacion;
 import Enums.TipoHabitacion;
+import Interfaces.Identificador;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Reserva {
+public class Reserva implements Identificador {
 
     /// ATRIBUTOS
 
@@ -43,5 +44,10 @@ public class Reserva {
     @Override
     public int hashCode() {
         return Objects.hashCode(idReserva);
+    }
+
+    @Override
+    public int getIdentificador() {
+        return this.idReserva;
     }
 }
