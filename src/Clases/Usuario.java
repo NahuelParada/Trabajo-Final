@@ -1,11 +1,13 @@
 package Clases;
 
+import Interfaces.Identificador;
+
 import java.util.Objects;
 
 public abstract class Usuario {
     /// Atributos
-    String nombre;
-    String contraseña;
+    private String nombre;
+    private String contraseña;
 
     /// Constructor
     public Usuario(String nombre, String contraseña) {
@@ -13,29 +15,17 @@ public abstract class Usuario {
         this.contraseña = contraseña;
     }
     /// Metodos
+
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getContraseña() {
         return contraseña;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    public boolean iniciarSesion(String nombre, String contraseña)
-    {
-        if(this.nombre.equalsIgnoreCase(nombre) && this.contraseña.equalsIgnoreCase(contraseña))
-        {
-            return true;
-        }
-        return false;
+    public boolean iniciarSesion(String nombre, String contraseña) {
+        return this.nombre.equals(nombre) && this.contraseña.equals(contraseña);
     }
 
     public boolean cerrarSesion()
@@ -43,19 +33,25 @@ public abstract class Usuario {
         return true;
     }
 
+    /// Equals & hashcode
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false; // <-- Clave
 
         Usuario usuario = (Usuario) o;
-        return Objects.equals(nombre, usuario.nombre) &&
-                Objects.equals(contraseña, usuario.contraseña);
+        return Objects.equals(nombre, usuario.nombre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, contraseña);
+        return Objects.hash(nombre);
+    }
+    /// ToString
+    @Override
+    public String toString() {
+        return "- Nombre: %s".formatted(nombre);
     }
 
 }

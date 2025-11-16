@@ -1,10 +1,11 @@
 package Clases;
 
 import Enums.Turno;
+import Interfaces.Identificador;
 
 import java.util.Objects;
 
-public class Recepcionista extends Usuario {
+public class Recepcionista extends Usuario implements Identificador {
     /// Atributos
     public static int contador = 1;
     private int id;
@@ -17,7 +18,20 @@ public class Recepcionista extends Usuario {
         this.id = contador++;
         this.turno = turno;
     }
+    /// Getter y setters
+    public int getId() {
+        return id;
+    }
 
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
+    }
+
+    /// Equals & Hashcode
     @Override
     public boolean equals(Object o) {
         if (!super.equals(o)) return false;
@@ -30,12 +44,22 @@ public class Recepcionista extends Usuario {
         return Objects.hash(super.hashCode(), id);
     }
 
+    /// ToString
+
     @Override
     public String toString() {
-        return "Informacion del usuario "+ nombre +"\n: " +
-                "-Rango : Recepcionista \n"+
-                "-ID: " + id + "\n" +
-                "-Turno: " + turno;
+        return """
+           Información del usuario:
+           %s
+           - Rango : Recepcionista
+           - ID    : %d
+           - Turno : %s
+           """.formatted(super.toString(), id, turno);
+    }
 
+    /// Interfaz
+    @Override
+    public int getIdentificador() {
+        return this.id;
     }
 }
