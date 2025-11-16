@@ -32,10 +32,9 @@ public class Recepcionista extends Usuario {
 
     @Override
     public String toString() {
-        return "Recepcionista{" +
-                "id=" + id +
-                ", turno=" + turno +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return "RECEPCIONISTA: \n" +
+                "-ID: " + id + "\n" +
+                "-Nombre: " + nombre + "\n" +
+                "-Turno: " + turno + "\n";
     }
 }

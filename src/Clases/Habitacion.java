@@ -20,4 +20,12 @@ public class Habitacion implements Identificador {
     public int getIdentificador() {
         return this.numHabitacion;
     }
+
+    public String toString()
+    {
+        return "Habitacion: \n" +
+                "-Numero de Habitacion: " + numHabitacion + "\n" +
+                "-Tipo de Habitacion: " + tipo.toString() + "\n" +
+                "-Estado Actual: " + estado.toString() + "\n";
+    }
 }
