@@ -23,9 +23,8 @@ public class CheckIn {
 
     @Override
     public String toString() {
-        return "Información de Check-In: \n" +
-                "-idCheckIn: " + idCheckIn + "\n" +
-                "-fecha: " + fecha + "\n" +
-                "-reserva: " + reserva;
+        return "Información de Check-In Nº" + idCheckIn + ":\n" +
+                "-Fecha: " + fecha + "\n" +
+                "-Reserva: " + reserva;
     }
 }

@@ -23,9 +23,8 @@ public class CheckOut {
 
     @Override
     public String toString() {
-        return "Información de Check-Out: \n" +
-                "-idCheckOut: " + idCheckOut + "\n" +
-                "-fecha: " + fecha + "\n" +
-                "-reserva: " + reserva;
+        return "Información de Check-Out Nº" + idCheckOut + ":\n" +
+                "-Fecha: " + fecha + "\n" +
+                "-Reserva: " + reserva;
     }
 }

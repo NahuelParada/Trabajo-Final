@@ -55,13 +55,13 @@ public class Reserva implements Identificador {
 
     @Override
     public String toString() {
-        return "Información de reserva: \n" +
-                "-idReserva: " + idReserva + "\n" +
-                "-pago: " + pago + "\n" +
-                "-fechaInicio: " + fechaInicio + "\n" +
-                "-fechaFin: " + fechaFin + "\n" +
-                "-pasajero: " + pasajero + "\n" +
-                "-habitacion: " + habitacion;
+        return "Información de reserva Nº" + idReserva +
+                ":" + "\n" +
+                "-Metodo de pago: " + pago + "\n" +
+                "-Fecha de inicio: " + fechaInicio + "\n" +
+                "-Fecha de fin: " + fechaFin + "\n" +
+                "-Pasajero: " + pasajero + "\n" +
+                "-Habitacion: " + habitacion;
     }
 
 }
