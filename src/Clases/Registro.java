@@ -14,6 +14,7 @@ public class Registro <T extends Identificador>  {
         this.registro = new ArrayList<T>();
     }
 
+
     public String mostrarLista(){
         String info = "";
         for(T item: registro){
@@ -35,6 +36,18 @@ public class Registro <T extends Identificador>  {
                  registro.remove(item);
             }
         }
+    }
+
+    public T buscarPorNumero(int id){
+        T item;
+        Iterator<T> lista = registro.iterator();
+        while(lista.hasNext()){
+            item = lista.next();
+            if(item.getIdentificador() == id){
+                return item;
+            }
+        }
+        return null;
     }
 
 }
