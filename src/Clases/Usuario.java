@@ -45,8 +45,12 @@ public abstract class Usuario {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Usuario usuario)) return false;
-        return Objects.equals(nombre, usuario.nombre);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false; // <-- Clave
+
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(nombre, usuario.nombre) &&
+                Objects.equals(contraseña, usuario.contraseña);
     }
 
     @Override

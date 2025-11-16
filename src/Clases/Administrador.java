@@ -21,8 +21,8 @@ public class Administrador extends Usuario{
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Administrador that)) return false;
         if (!super.equals(o)) return false;
+        Administrador that = (Administrador) o;
         return id == that.id;
     }
 
@@ -30,7 +30,6 @@ public class Administrador extends Usuario{
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
     }
-
     @Override
     public String toString() {
         return "Informacion del usuario "+ nombre +"\n: " +

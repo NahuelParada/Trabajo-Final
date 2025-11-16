@@ -20,8 +20,8 @@ public class Recepcionista extends Usuario {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Recepcionista that)) return false;
         if (!super.equals(o)) return false;
+        Recepcionista that = (Recepcionista) o;
         return id == that.id;
     }
 
