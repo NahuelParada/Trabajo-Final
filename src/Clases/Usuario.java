@@ -4,7 +4,7 @@ import Interfaces.Identificador;
 
 import java.util.Objects;
 
-public abstract class Usuario {
+public abstract class Usuario implements  Identificador {
     /// Atributos
     private String nombre;
     private String contraseña;
@@ -32,6 +32,11 @@ public abstract class Usuario {
     {
         return true;
     }
+
+    /// Interfaz(no se usa)
+
+    @Override
+    public abstract int getIdentificador();
 
     /// Equals & hashcode
 

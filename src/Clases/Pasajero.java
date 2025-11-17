@@ -1,6 +1,10 @@
 package Clases;
 
-public class Pasajero {
+import Interfaces.Identificador;
+
+import java.util.Objects;
+
+public class Pasajero implements Identificador {
     /// Atributos
     private String dni;
     private String nombre;
@@ -21,6 +25,27 @@ public class Pasajero {
         this.domicilio = domicilio;
     }
 
+    /// Interfaz
+
+    @Override
+    public int getIdentificador() {
+        return Integer.parseInt(dni);
+    }
+
+    /// Equals & Hashout
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pasajero pasajero = (Pasajero) o;
+        return Objects.equals(dni, pasajero.dni);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(dni);
+    }
 
     ///  ToString
 
