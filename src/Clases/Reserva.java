@@ -21,18 +21,20 @@ public class Reserva implements Identificador {
 
     /// Constructor
 
-    public Reserva(MetodoPago pago, int anio, int mes, int dia, Pasajero pasajeroReserva, Habitacion habitacionReserva) {
+    public Reserva(MetodoPago pago, LocalDate fechaInicio,LocalDate fechaFin, Pasajero pasajero, Habitacion habitacion) {
         idReserva = contador++;
         this.pago = pago;
-        this.fechaInicio = LocalDate.now();
-        this.fechaFin = LocalDate.of(anio, mes, dia);
-        this.pasajero = pasajeroReserva;
-        this.habitacion = habitacionReserva;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.pasajero = pasajero;
+        this.habitacion = habitacion;
     }
 
     public int getIdReserva() {
         return idReserva;
     }
+
+    ///Equals & Hashcode
 
     @Override
     public boolean equals(Object o) {
@@ -45,6 +47,8 @@ public class Reserva implements Identificador {
     public int hashCode() {
         return Objects.hashCode(idReserva);
     }
+
+    /// Interfaz
 
     @Override
     public int getIdentificador() {
