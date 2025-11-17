@@ -56,4 +56,7 @@ public class Registro <T extends Identificador>  {
         return registro.contains(item);
     }
 
+    public HashSet<T> listarTodos() {
+        return new HashSet<>(registro);
+    }
 }

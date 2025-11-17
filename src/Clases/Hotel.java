@@ -25,6 +25,25 @@ public class Hotel {
         this.habitaciones = new Registro<>();
     }
 
+    /// Getter y Setter
+
+
+    public Registro<Habitacion> getHabitaciones() {
+        return habitaciones;
+    }
+
+    public Registro<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public Registro<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public Registro<Pasajero> getPasajeros() {
+        return pasajeros;
+    }
+
     /// METODOS
     public boolean agregarReserva(Reserva reserva){
         if (reservas.contiene(reserva)) {
