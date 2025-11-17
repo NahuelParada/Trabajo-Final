@@ -2,16 +2,17 @@ package Clases;
 
 import Interfaces.Identificador;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 
 //Agrego la interfaz al objeto generico para que estos metodos solo funcionen con Registros de clases que implementen dicha interfaz
 public class Registro <T extends Identificador>  {
     /// Atriburto
-    private ArrayList<T> registro;
+    private HashSet<T> registro;
     /// Constructor
     public Registro() {
-        this.registro = new ArrayList<T>();
+        this.registro = new HashSet<T>();
     }
 
 
