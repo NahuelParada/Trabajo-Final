@@ -27,13 +27,12 @@ public class Pasajero {
     @Override
     public String toString() {
         return "Información de pasajero: \n" +
-                "  -DNI: '" + dni + "'\n" +
-                "  -Nombre: '" + nombre + "'\n" +
-                "  -Apellido: '" + apellido + "'\n" +
-                "  -Gmail: '" + gmail + "'\n" +
-                "  -Telefono: '" + telefono + "'\n" +
-                "  -Origen: '" + origen + "'\n" +
-                "  -Domicilio: '" + domicilio + "'" +
-                " ";
+                "  -DNI: " + dni + "\n" +
+                "  -Nombre: " + nombre + "\n" +
+                "  -Apellido: " + apellido + "\n" +
+                "  -Gmail: " + gmail + "\n" +
+                "  -Telefono: " + telefono + "\n" +
+                "  -Origen: " + origen + "\n" +
+                "  -Domicilio: " + domicilio ;
     }
 }
