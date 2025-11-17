@@ -5,6 +5,7 @@ import Enums.TipoHabitacion;
 import Interfaces.Identificador;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class Reserva implements Identificador {
@@ -29,9 +30,14 @@ public class Reserva implements Identificador {
         this.pasajero = pasajero;
         this.habitacion = habitacion;
     }
-
+    /// Metodo
     public int getIdReserva() {
         return idReserva;
+    }
+
+    public double calcularCosto() {
+        long noches = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+        return noches * habitacion.getPrecioXNoche();
     }
 
     ///Equals & Hashcode
