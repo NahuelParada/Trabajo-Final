@@ -77,8 +77,4 @@ public class Hotel {
         return habitacion.disponibilidad();
     }
 
-    public boolean cancelarReserva(Reserva reserva){
-        return reservas.eliminarRegistro(reserva);
-    }
-
 }
