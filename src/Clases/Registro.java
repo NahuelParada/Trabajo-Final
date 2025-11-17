@@ -26,9 +26,10 @@ public class Registro <T extends Identificador>  {
 
     public boolean agregarRegistro(T item){ return registro.add(item); }
 
+    public boolean eliminarRegistro(T item){ return registro.remove(item); }
 
     //Busca por numero un objeto en la lista y lo elimina
-    public void eliminarRegistro(int id){
+    public void eliminarRegistroPorId(int id){
         Iterator<T> lista = registro.iterator();
 
         while(lista.hasNext()){
@@ -49,6 +50,10 @@ public class Registro <T extends Identificador>  {
             }
         }
         return null;
+    }
+
+    public boolean contiene(T item){
+        return registro.contains(item);
     }
 
 }

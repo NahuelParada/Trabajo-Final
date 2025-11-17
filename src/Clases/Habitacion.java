@@ -45,6 +45,13 @@ public class Habitacion implements Identificador {
         return numHabitacion;
     }
 
+    public boolean disponibilidad(){
+        if(estado == EstadoHabitacion.OCUPADA || estado == EstadoHabitacion.MANTENIMIENTO){
+            return false;
+        }
+        return true;
+    }
+
     /// Interfaz
 
     @Override
