@@ -73,8 +73,4 @@ public class Hotel {
         return habitaciones.agregarRegistro(habitacion);
     }
 
-    public boolean verificarDisponible(Habitacion habitacion){
-        return habitacion.disponibilidad();
-    }
-
 }

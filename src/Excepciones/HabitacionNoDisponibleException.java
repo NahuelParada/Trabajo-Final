@@ -1,6 +1,6 @@
 package Excepciones;
 
-public class HabitacionNoDisponibleException extends RuntimeException {
+public class HabitacionNoDisponibleException extends Exception {
     public HabitacionNoDisponibleException(String message) {
         super(message);
     }

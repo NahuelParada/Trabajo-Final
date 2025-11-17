@@ -45,11 +45,16 @@ public class Habitacion implements Identificador {
         return numHabitacion;
     }
 
-    public boolean disponibilidad(){
-        if(estado == EstadoHabitacion.OCUPADA || estado == EstadoHabitacion.MANTENIMIENTO ||estado == EstadoHabitacion.RESERVADA){
-            return false;
-        }
-        return true;
+    public boolean disponibleParaReserva() {
+        return estado == EstadoHabitacion.LIBRE;
+    }
+
+    public boolean disponibleParaCheckIn() {
+        return estado == EstadoHabitacion.RESERVADA;
+    }
+
+    public boolean ocupadaParaCheckOut() {
+        return estado == EstadoHabitacion.OCUPADA;
     }
 
     /// Interfaz
