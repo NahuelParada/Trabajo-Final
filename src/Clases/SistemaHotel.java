@@ -74,8 +74,21 @@ public class SistemaHotel {
         if(r == null){
             throw new NullPointerException("Reserva no encontrada");
         }
-
+        r.getHabitacion().setEstado(EstadoHabitacion.LIBRE);
         return hotel.getReservas().eliminarRegistro(r);
+    }
+
+    /// CheckIn & CheckOut
+
+    public boolean realizarCheckOut (int idReserva) throws NullPointerException{
+        Reserva r = hotel.getReservas().buscarPorNumero(idReserva);
+
+        if(r == null){
+            throw new NullPointerException("Reserva no encontrada");
+        }
+
+        r.getHabitacion().setEstado(EstadoHabitacion.OCUPADA);
+        return true;
     }
 
 }

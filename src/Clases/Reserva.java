@@ -30,6 +30,13 @@ public class Reserva implements Identificador {
         this.pasajero = pasajero;
         this.habitacion = habitacion;
     }
+    /// Getter y Setter
+
+    public Habitacion getHabitacion() {
+        return habitacion;
+    }
+
+
     /// Metodo
     public int getIdReserva() {
         return idReserva;
