@@ -4,6 +4,8 @@ import Enums.EstadoHabitacion;
 import Enums.TipoHabitacion;
 import Interfaces.Identificador;
 
+import java.util.Objects;
+
 public class Habitacion implements Identificador {
     /// Atributos
     private int numHabitacion;
@@ -48,6 +50,20 @@ public class Habitacion implements Identificador {
     @Override
     public int getIdentificador() {
         return this.numHabitacion;
+    }
+
+    /// Equals & Hashcode
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Habitacion that = (Habitacion) o;
+        return numHabitacion == that.numHabitacion;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(numHabitacion);
     }
 
     /// ToString
