@@ -13,9 +13,9 @@ public class CheckIn {
 
     /// CONSTRUCTOR
 
-    public CheckIn(Reserva reserva) {
+    public CheckIn(Reserva reserva, LocalDate fecha) {
         this.idCheckIn = contador++;
-        this.fecha = LocalDate.now();
+        this.fecha = fecha;
         this.reserva = reserva;
     }
 
@@ -25,6 +25,6 @@ public class CheckIn {
     public String toString() {
         return "Información de Check-In Nº" + idCheckIn + ":\n" +
                 "-Fecha: " + fecha + "\n" +
-                "-Reserva: " + reserva;
+                "-Reserva: Nº" + reserva.getIdReserva();
     }
 }

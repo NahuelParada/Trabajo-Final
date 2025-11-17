@@ -13,9 +13,9 @@ public class CheckOut {
 
     /// CONSTRUCTOR
 
-    public CheckOut(Reserva reserva) {
+    public CheckOut(Reserva reserva, LocalDate fecha) {
         this.idCheckOut = contador++;
-        this.fecha = LocalDate.now();
+        this.fecha = fecha;
         this.reserva = reserva;
     }
 
@@ -25,6 +25,6 @@ public class CheckOut {
     public String toString() {
         return "Información de Check-Out Nº" + idCheckOut + ":\n" +
                 "-Fecha: " + fecha + "\n" +
-                "-Reserva: " + reserva;
+                "-Reserva: Nº" + reserva.getIdReserva();
     }
 }
