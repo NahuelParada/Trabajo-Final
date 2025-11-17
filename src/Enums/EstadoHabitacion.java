@@ -3,6 +3,7 @@ package Enums;
 public enum EstadoHabitacion {
     OCUPADA("OCUPADA"),
     LIBRE("LIBRE"),
+    RESERVADA("RESERVADA"),
     MANTENIMIENTO("EN MANTENIMIENTO");
 
     public final String estado;

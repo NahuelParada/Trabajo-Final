@@ -46,7 +46,7 @@ public class Habitacion implements Identificador {
     }
 
     public boolean disponibilidad(){
-        if(estado == EstadoHabitacion.OCUPADA || estado == EstadoHabitacion.MANTENIMIENTO){
+        if(estado == EstadoHabitacion.OCUPADA || estado == EstadoHabitacion.MANTENIMIENTO ||estado == EstadoHabitacion.RESERVADA){
             return false;
         }
         return true;
