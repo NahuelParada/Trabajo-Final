@@ -8,13 +8,106 @@ import Excepciones.HabitacionNoDisponibleException;
 import Excepciones.ReservaNoEncontradaException;
 import Excepciones.UsuarioNoValidoException;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
+
+        System.out.printf("====== Bienvenido Usuario ======\n\n");
+        Scanner sc = new Scanner(System.in);
+
+        System.out.printf("Ingrese su Nombre: ");
+        String nombreUs = sc.nextLine();
+
+        System.out.printf("Ingrese su Contrasña: ");
+        String contraseñaUs = sc.nextLine();
+
+        Administrador ad = new Administrador(nombreUs, contraseñaUs);
+        boolean acceso = false;
+
+        /*
+        if()
+        {
+            acceso = true;
+        }
+        */
+
+        /*if()
+        {
+            /// Contenido
+        }
+        else
+        {
+            String nombreHotel = sc.nextLine();
+            String direccionHotel = sc.nextLine();
+            SistemaHotel gestionador_hotel = new SistemaHotel(nombreHotel, direccionHotel);
+
+
+            /// Y con el json se guarda el hotel
+        }*/
+
+        int opcion = 0;
+
+        while(acceso == true)
+        {
+            System.out.println("================= Menu Principal =================\n\n");
+            System.out.println("1. Mostrar Habitaciondes Disponibles");
+            System.out.println("2. Mostrar Habitaciondes No Disponibles");
+            System.out.println("3. Crear una Reserva");
+            System.out.println("4. Cancelar una Reserva");
+            System.out.println("5. Realizar un Check IN");
+            System.out.println("6. Realizar un Check OUT");
+            System.out.println("7. Crear un Administrador");
+            System.out.println("8. Crear un Recepcionista");
+            System.out.println("9. Eliminar un Administrador");
+            System.out.println("10. Eliminar un Recepcionista");
+            System.out.println("11. Agregar un Pasajero");
+            System.out.println("0. Salir del Sistema");
+
+            System.out.printf("\n\n");
+            System.out.println("Ingrese una opcion: ");
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion)
+            {
+                case 1:
+                    /// Modificar el Metodo
+                break;
+                case 2:
+                    /// Modificar el Metodo
+                break;
+                case 3:
+                    crearUsuario(sc);
+                break;
+                case 4:
+                    /// Modificar el Metodo
+                break;
+                case 5:
+                    /// Modificar el Metodo
+                break;
+            }
+        }
+
+        /*int opciones = sc.nextInt();
+        sc.nextLine();
+
+        if()
+
+
+        switch(opciones)
+        {
+            case 1:
+
+
+
+            break;
+        }
 
         /// Clase Hotel Unica
         Hotel hotel = new Hotel("Hoteleria Cielos y Mares", "Barrio Alberdi 5404");
@@ -194,7 +287,7 @@ public class Main {
         /// Comprobar existencia
         System.out.println(hotel.getUsuarios().mostrarLista());
 
-        /// Hay otro metodo que tiene que preguntar Nahuel ///
+        /// Hay otro metodo que tiene que preguntar Nahuel ///*/
 
     }
 
@@ -215,5 +308,56 @@ public class Main {
             contenido = contenido + h.toString() + "\n";
         }
         return contenido += "================================================================= \n";
+    }
+
+    public static void crearUsuario(Scanner sc) {
+        System.out.printf("Ingrese Nombre Recepcionsita: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Recepcionsita: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.printf("DNI: ");
+        String dni = sc.nextLine();
+        System.out.printf("Nombre: ");
+        String nombre = sc.nextLine();
+        System.out.printf("Apellido: ");
+        String apellido = sc.nextLine();
+        System.out.printf("Correo: ");
+        String gmail = sc.nextLine();
+        System.out.printf("Telefono: ");
+        String telefono = sc.nextLine();
+        System.out.printf("Origen: ");
+        String origen = sc.nextLine();
+        System.out.printf("Domicilio: ");
+        String domicilio = sc.nextLine();
+
+        System.out.printf("Numero de Habitacion: ");
+        int numero_habitacion = sc.nextInt();
+
+        System.out.println("Ingrese la fecha de Inicio");
+        System.out.printf("Año: ");
+        int añoI = sc.nextInt();
+        sc.nextLine();
+        System.out.printf("Mes: ");
+        int mesI = sc.nextInt();
+        sc.nextLine();
+        System.out.printf("Dia: ");
+        int diaI = sc.nextInt();
+        sc.nextLine();
+        LocalDate fechaInicio = LocalDate.of(añoI, mesI, diaI);
+
+        System.out.println("Ingrese la fecha Final");
+        System.out.printf("Año: ");
+        int añoF = sc.nextInt();
+        sc.nextLine();
+        System.out.printf("Mes: ");
+        int mesF = sc.nextInt();
+        sc.nextLine();
+        System.out.printf("Dia: ");
+        int diaF = sc.nextInt();
+        sc.nextLine();
+        LocalDate fechaFinal = LocalDate.of(añoF, mesF, diaF);
+
+        /// Deberia ingresar la reserva en el Sistema
     }
 }
