@@ -25,7 +25,16 @@ public class Hotel {
         this.habitaciones = new Registro<>();
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
     /// Getter y Setter
+
 
 
     public Registro<Habitacion> getHabitaciones() {

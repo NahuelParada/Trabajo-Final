@@ -56,11 +56,11 @@ public class Main {
         hotel.agregarHabitacion(hab11);
 
         /// Se crea una Clase Envolvente con los parametros de el Hotel. Solo el Hotel y las Habitaciones
-        SistemaHotel hotel_envolvente = new SistemaHotel(hotel);
+        SistemaHotel hotel_envolvente = new SistemaHotel(hotel.getNombre(), hotel.getDireccion());
 
         /// Guardamos la coleccion de Habitaciones Ocupadas y Libres
         HashSet<Habitacion> libre = hotel_envolvente.listarHabitacionesDisponibles();
-        HashSet<Habitacion> ocupado = hotel_envolvente.listarHabitacionesOcupadas();
+        HashSet<Habitacion> ocupado = hotel_envolvente.listarHabitacionesNoDisponibles();
 
         /// Hay un problema a la hora de mostrar las habitaciones y es que:
         /// En la lista de Ocupados, tambien se muestran los de Mantenimiento:

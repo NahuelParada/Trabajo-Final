@@ -12,11 +12,11 @@ public class SistemaHotel {
     private Hotel hotel;
     /// Constructor
 
-    public SistemaHotel(Hotel hotel) {
-        this.hotel = hotel;
+    public SistemaHotel( String nombre, String direccion) {
+        this.hotel = new Hotel(nombre, direccion);
     }
 
-    /// HABITACIONES
+    /// HABITACIONES MAL RETORNAR STRING
 
     public HashSet<Habitacion> listarHabitacionesDisponibles(){
         HashSet<Habitacion> Disponibles = new HashSet<>();
