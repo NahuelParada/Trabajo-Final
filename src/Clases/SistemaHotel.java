@@ -29,7 +29,7 @@ public class SistemaHotel {
         return Disponibles;
     }
 
-    public HashSet<Habitacion> listarHabitacionesOcupadas(){
+    public HashSet<Habitacion> listarHabitacionesNoDisponibles(){
         HashSet<Habitacion> noDisponibles = new HashSet<>();
 
         for (Habitacion h: hotel.getHabitaciones().listarTodos()){
