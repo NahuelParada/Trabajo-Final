@@ -1,6 +1,7 @@
 package Clases;
 
 import Interfaces.Identificador;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,4 +52,23 @@ public class Administrador extends Usuario implements Identificador {
     public int getIdentificador() {
         return this.id;
     }
+
+
+    /// SERIALIZACION
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("nombre", getNombre());
+        json.put("contraseña", getContraseña());
+        json.put("tipo", "administrador");
+        return json;
+    }
+
+    /// DESERIALIZACION
+    public Administrador(JSONObject obj) {
+        super(obj.getString("nombre"), obj.getString("contraseña"));
+        this.id = obj.getInt("id");
+        if (id >= contador) contador = id + 1;
+    }
+
 }
