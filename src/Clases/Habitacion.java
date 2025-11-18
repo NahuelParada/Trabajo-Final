@@ -3,6 +3,7 @@ package Clases;
 import Enums.EstadoHabitacion;
 import Enums.TipoHabitacion;
 import Interfaces.Identificador;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -89,4 +90,23 @@ public class Habitacion implements Identificador {
                 "-Estado Actual: " + estado.toString() + "\n" +
                 "-Precio por Noche: " + precioXNoche + "\n";
     }
+
+    /// SERIALIZACION
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("numHabitacion", numHabitacion);
+        json.put("tipo", tipo.toString());
+        json.put("estado", estado.toString());
+        json.put("precioXNoche", precioXNoche);
+        return json;
+    }
+
+    /// DESERIALIZACION
+    public Habitacion(JSONObject obj) {
+        this.numHabitacion = obj.getInt("numHabitacion");
+        this.tipo = TipoHabitacion.valueOf(obj.getString("tipo"));
+        this.estado = EstadoHabitacion.valueOf(obj.getString("estado"));
+        this.precioXNoche = obj.getDouble("precioXNoche");
+    }
+
 }

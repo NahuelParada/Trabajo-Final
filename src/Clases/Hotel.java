@@ -33,25 +33,6 @@ public class Hotel {
         return direccion;
     }
 
-    /// Getter y Setter
-
-
-
-    public Registro<Habitacion> getHabitaciones() {
-        return habitaciones;
-    }
-
-    public Registro<Reserva> getReservas() {
-        return reservas;
-    }
-
-    public Registro<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public Registro<Pasajero> getPasajeros() {
-        return pasajeros;
-    }
 
     /// METODOS
     public boolean agregarReserva(Reserva reserva){
@@ -89,4 +70,26 @@ public class Hotel {
     public Pasajero buscarPasajero(String dni) {
         return pasajeros.buscarPorNumero(Integer.parseInt(dni));
     }
+
+    public String listarHabitacionesDisponibles() {
+        StringBuilder habDisponible = new StringBuilder();
+        for(Habitacion h : habitaciones){
+            if(h.disponibleParaReserva()){
+                habDisponible.append(h.toString()).append("\n");
+            }
+        }
+        return habDisponible.toString();
+    }
+
+    public String listarHabitacionesNoDisponibles() {
+        StringBuilder habNoDisponible = new StringBuilder();
+        for(Habitacion h : habitaciones){
+            if(h.ocupadaParaCheckOut() || h.disponibleParaCheckIn()){
+                habNoDisponible.append(h.toString()).append("\n");
+            }
+        }
+        return habNoDisponible.toString();
+    }
+
+
 }

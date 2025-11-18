@@ -1,5 +1,7 @@
 package Clases;
 
+import org.json.JSONObject;
+
 import java.time.LocalDate;
 
 public class CheckIn {
@@ -27,4 +29,21 @@ public class CheckIn {
                 "-Fecha: " + fecha + "\n" +
                 "-Reserva: Nº" + reserva.getIdReserva();
     }
+
+    /// SERIALIZACION
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("idCheckIn", idCheckIn);
+        json.put("fecha", fecha.toString());
+        json.put("reserva", reserva.toJson());
+        return json;
+    }
+
+    /// DESERIALIZACION
+    public CheckIn(JSONObject obj) {
+        this.idCheckIn = obj.getInt("idCheckIn");
+        this.fecha = LocalDate.parse(obj.getString("fecha"));
+        this.reserva = new Reserva(obj.getJSONObject("reserva"));
+    }
+
 }
