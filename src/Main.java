@@ -1,12 +1,7 @@
 import Clases.*;
-import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
-import Enums.TipoHabitacion;
-import Enums.Turno;
-import Excepciones.AccesoNoAutorizadoException;
-import Excepciones.HabitacionNoDisponibleException;
-import Excepciones.ReservaNoEncontradaException;
-import Excepciones.UsuarioNoValidoException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -18,38 +13,52 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.printf("====== Bienvenido Usuario ======\n\n");
         Scanner sc = new Scanner(System.in);
+        System.out.println("====== Bienvenido Usuario ======");
 
-        System.out.printf("Ingrese su Nombre: ");
-        String nombreUs = sc.nextLine();
-
-        System.out.printf("Ingrese su Contrasña: ");
-        String contraseñaUs = sc.nextLine();
-
-        Administrador ad = new Administrador(nombreUs, contraseñaUs);
         boolean acceso = false;
 
-        /*
-        if()
+        while(acceso == false)
         {
-            acceso = true;
-        }
-        */
+            System.out.printf("Ingrese su Nombre: ");
+            String nombreUs = sc.nextLine();
 
-        /*if()
+            System.out.printf("Ingrese su Contraseña: ");
+            String contraseñaUs = sc.nextLine();
+
+            acceso = IniciarSesionAdministradorSupremo(nombreUs, contraseñaUs);
+
+            if(acceso == false)
+            {
+                System.out.println("Nombre u Contraseña Incorrecto");
+            }
+        }
+
+        SistemaHotel gestionador_hotel;
+
+        if(acceso == true && AccederContenidoHotel() != true)
         {
-            /// Contenido
+            System.out.println("\n");
+            System.out.println("Accediendo a Crear un Nuevo Hotel:");
+            System.out.printf("Nombre del Hotel: ");
+            String nombreHotel = sc.nextLine();
+            System.out.printf("Direccion o Ubicacion del Hotel: ");
+            String direccionHotel = sc.nextLine();
+
+            gestionador_hotel = new SistemaHotel(nombreHotel, direccionHotel);
+            /// En teoria deberia haber una funcion que agrege el Usuario Principal a la lista ya que es otro Usuario
+
+            JSONObject objJSON = new JSONObject();
+            objJSON.put("nombreHotel", nombreHotel);
+            objJSON.put("direccion Hotel", direccionHotel);
+            JSONUtiles.uploadJSON(objJSON, "DataHotel");
         }
         else
         {
-            String nombreHotel = sc.nextLine();
-            String direccionHotel = sc.nextLine();
-            SistemaHotel gestionador_hotel = new SistemaHotel(nombreHotel, direccionHotel);
-
-
-            /// Y con el json se guarda el hotel
-        }*/
+            String contenido_json = JSONUtiles.downloadJSON("DataHotel");
+            JSONObject objJSON = new JSONObject(contenido_json);
+            gestionador_hotel = new SistemaHotel(objJSON.getString("Nombre"), objJSON.getString("Direccion"));
+        }
 
         int opcion = 0;
 
@@ -77,13 +86,13 @@ public class Main {
             switch (opcion)
             {
                 case 1:
-                    /// Modificar el Metodo
+                    System.out.println(gestionador_hotel.listarHabitacionesDisponibles());
                 break;
                 case 2:
-                    /// Modificar el Metodo
+                    System.out.println(gestionador_hotel.listarHabitacionesNoDisponibles());
                 break;
                 case 3:
-                    crearUsuario(sc);
+                    crearUsuario(sc, gestionador_hotel);
                 break;
                 case 4:
                     /// Modificar el Metodo
@@ -291,6 +300,49 @@ public class Main {
 
     }
 
+    /// Metodo para Iniciar Sesion como Administrador Supremo
+    public static boolean IniciarSesionAdministradorSupremo(String nombreUs, String contraseñaUs)
+    {
+        String contenidoJson = JSONUtiles.downloadJSON("AdministradorSupremo");
+        JSONObject jsonObject = new JSONObject(contenidoJson);
+
+        String nombrePrueb = jsonObject.getString("nombre");
+        String contraseñaPrueb = jsonObject.getString("contraseña");
+
+        Administrador adminJSON = new Administrador(nombrePrueb, contraseñaPrueb);
+
+        if(adminJSON.iniciarSesion(nombreUs, contraseñaUs))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// Metodo para saber que el Hotel no esta vacio
+    public static boolean AccederContenidoHotel()
+    {
+        /// El metodo solo devuelve TRUE o FALSE, no es necesario llamar a nadie
+
+        String contenidoJson = "";
+        try
+        {
+            contenidoJson = JSONUtiles.downloadJSON("DataHotel");
+        }
+        catch (JSONException e)
+        {
+            System.out.println("Archivo JSON no encontrado ERROR: " + e.getMessage());
+            return false;
+        }
+
+        if(contenidoJson.equals("") || contenidoJson.isEmpty())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /// Preguntar si es necesario que el Hotel muestre todo su Contenido
     public static String mostrarHotel(Hotel x, String estado)
     {
@@ -310,7 +362,8 @@ public class Main {
         return contenido += "================================================================= \n";
     }
 
-    public static void crearUsuario(Scanner sc) {
+    public static void crearReserva(Scanner sc, SistemaHotel hotel) {
+        System.out.println("======= Creando un Usuario Nuevo =======");
         System.out.printf("Ingrese Nombre Recepcionsita: ");
         String nombreRep = sc.nextLine();
         System.out.printf("Ingrese Contraseña Recepcionsita: ");
@@ -330,6 +383,39 @@ public class Main {
         String origen = sc.nextLine();
         System.out.printf("Domicilio: ");
         String domicilio = sc.nextLine();
+
+        System.out.println("Elige Metodo de Pago:");
+        System.out.println("1.Credito");
+        System.out.println("2.Debito");
+        System.out.println("3.Efectivo");
+        System.out.println("Escriba aqui:");
+
+        MetodoPago metodoPago = null;
+        boolean comprobacion = false;
+        while (comprobacion == false)
+        {
+            int opcion = sc.nextInt();
+            sc.nextLine();
+            switch (opcion)
+            {
+                case 1:
+                    metodoPago = MetodoPago.CREDITO;
+                    break;
+                case 2:
+                    metodoPago = MetodoPago.DEBITO;
+                    break;
+                case 3:
+                    metodoPago = MetodoPago.EFECTIVO;
+                    break;
+                    default:
+                        System.out.println("ingreso una opcion Incorrecta");
+            }
+
+            if(opcion == 1 || opcion == 2 || opcion == 3)
+            {
+                comprobacion = true;
+            }
+        }
 
         System.out.printf("Numero de Habitacion: ");
         int numero_habitacion = sc.nextInt();
@@ -358,6 +444,9 @@ public class Main {
         sc.nextLine();
         LocalDate fechaFinal = LocalDate.of(añoF, mesF, diaF);
 
-        /// Deberia ingresar la reserva en el Sistema
+
+
+
+        hotel.crearReserva(new Pasajero(dni, nombre, apellido, gmail, telefono, origen, domicilio), metodoPago.getMetodo(), numero_habitacion, fechaInicio, fechaFinal, new Recepcionista(nombreRep, contraseñaRep));
     }
 }
