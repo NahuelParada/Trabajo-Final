@@ -1,6 +1,7 @@
 package Clases;
 
 import Interfaces.Identificador;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -60,4 +61,31 @@ public class Pasajero implements Identificador {
                 "  -Origen: " + origen + "\n" +
                 "  -Domicilio: " + domicilio ;
     }
+
+    /// SERIALIZACION
+
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("dni", dni);
+        obj.put("nombre", nombre);
+        obj.put("apellido", apellido);
+        obj.put("gmail", gmail);
+        obj.put("telefono", telefono);
+        obj.put("origen", origen);
+        obj.put("domicilio", domicilio);
+        return obj;
+    }
+
+    /// DESERIALIZACION
+
+    public Pasajero(JSONObject obj) {
+        this.dni = obj.getString("dni");
+        this.nombre = obj.getString("nombre");
+        this.apellido = obj.getString("apellido");
+        this.gmail = obj.getString("gmail");
+        this.telefono = obj.getString("telefono");
+        this.origen = obj.getString("origen");
+        this.domicilio = obj.getString("domicilio");
+    }
+
 }

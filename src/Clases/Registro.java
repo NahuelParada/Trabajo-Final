@@ -62,4 +62,10 @@ public class Registro <T extends Identificador>  {
         return new HashSet<>(registro);
     }
 
+    /// Getter
+
+    public HashSet<T> getRegistro() {
+        return registro;
+    }
+
 }

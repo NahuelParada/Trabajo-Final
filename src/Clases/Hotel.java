@@ -1,6 +1,8 @@
 package Clases;
 
 import Enums.MetodoPago;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.text.html.HTMLDocument;
 import java.time.LocalDate;
@@ -75,6 +77,76 @@ public class Hotel {
 
     public boolean verificarDisponible(Habitacion habitacion){
         return habitacion.disponibilidad();
+    }
+
+    /// SERIALIZACION
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("nombre", nombre);
+        json.put("direccion", direccion);
+
+        JSONArray arrayUsuarios = new JSONArray();
+        for (Usuario u : usuarios.listarTodos())
+            arrayUsuarios.put(u.toJson());
+        json.put("usuarios", arrayUsuarios);
+
+        JSONArray arrayPasajeros = new JSONArray();
+        for (Pasajero p : pasajeros.listarTodos())
+            arrayPasajeros.put(p.toJson());
+        json.put("pasajeros", arrayPasajeros);
+
+        JSONArray arrayHabitaciones = new JSONArray();
+        for (Habitacion h : habitaciones.listarTodos())
+            arrayHabitaciones.put(h.toJson());
+        json.put("habitaciones", arrayHabitaciones);
+
+        JSONArray arrayReservas = new JSONArray();
+        for (Reserva r : reservas.listarTodos())
+            arrayReservas.put(r.toJson());
+        json.put("reservas", arrayReservas);
+
+        return json;
+    }
+
+    /// DESERIALIZACION
+    public Hotel(JSONObject obj) {
+        this.nombre = obj.getString("nombre");
+        this.direccion = obj.getString("direccion");
+
+        this.reservas = new Registro<>();
+        JSONArray arrayReservas = obj.getJSONArray("reservas");
+        for (int i = 0; i < arrayReservas.length(); i++)
+            reservas.agregarRegistro(new Reserva(arrayReservas.getJSONObject(i)));
+
+        this.usuarios = new Registro<>();
+        JSONArray arrayUsuarios = obj.getJSONArray("usuarios");
+        for (int i = 0; i < arrayUsuarios.length(); i++) {
+
+            JSONObject ujson = arrayUsuarios.getJSONObject(i);
+            String tipo = ujson.getString("tipo");
+
+            Usuario u;
+
+            if (tipo.equals("Administrador"))
+                u = new Administrador(ujson);
+            else if (tipo.equals("Recepcionista"))
+                u = new Recepcionista(ujson);
+            else
+                throw new RuntimeException("Tipo de usuario no reconocido: " + tipo);
+
+            usuarios.agregarRegistro(u);
+        }
+
+        this.pasajeros = new Registro<>();
+        JSONArray arrayPasajeros = obj.getJSONArray("pasajeros");
+        for (int i = 0; i < arrayPasajeros.length(); i++)
+            pasajeros.agregarRegistro(new Pasajero(arrayPasajeros.getJSONObject(i)));
+
+        this.habitaciones = new Registro<>();
+        JSONArray arrayHabitaciones = obj.getJSONArray("habitaciones");
+        for (int i = 0; i < arrayHabitaciones.length(); i++)
+            habitaciones.agregarRegistro(new Habitacion(arrayHabitaciones.getJSONObject(i)));
     }
 
 }

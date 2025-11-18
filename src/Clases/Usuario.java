@@ -1,6 +1,7 @@
 package Clases;
 
 import Interfaces.Identificador;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -58,5 +59,20 @@ public abstract class Usuario implements  Identificador {
     public String toString() {
         return "- Nombre: %s".formatted(nombre);
     }
+
+    /// SERIALIZACION
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("nombre", nombre);
+        obj.put("contraseña", contraseña);
+        return obj;
+    }
+
+    /// DESERIALIZACION
+    public Usuario(JSONObject obj) {
+        this.nombre = obj.getString("nombre");
+        this.contraseña = obj.getString("contraseña");
+    }
+
 
 }

@@ -3,6 +3,7 @@ import Enums.MetodoPago;
 import Enums.EstadoHabitacion;
 import Enums.TipoHabitacion;
 import Interfaces.Identificador;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -79,6 +80,31 @@ public class Reserva implements Identificador {
                 "-Fecha de fin: " + fechaFin + "\n" +
                 "-Pasajero: " + pasajero + "\n" +
                 "-Habitacion: " + habitacion;
+    }
+
+    /// SERIALIZACION
+
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("idReserva", idReserva);
+        obj.put("pago", pago.toString());
+        obj.put("fechaInicio", fechaInicio.toString());
+        obj.put("fechaFin", fechaFin.toString());
+        obj.put("pasajero", pasajero.toJson());
+        obj.put("habitacion", habitacion.toJson());
+        return obj;
+    }
+
+    /// DESERIALIZACION
+
+    public Reserva(JSONObject obj) {
+        this.idReserva = obj.getInt("idReserva");
+        this.pago = MetodoPago.valueOf(obj.getString("pago"));
+        this.fechaInicio = LocalDate.parse(obj.getString("fechaInicio"));
+        this.fechaFin = LocalDate.parse(obj.getString("fechaFin"));
+        this.pasajero = new Pasajero(obj.getJSONObject("pasajero"));
+        this.habitacion = new Habitacion(obj.getJSONObject("habitacion"));
+        if (idReserva >= contador) contador = idReserva + 1;
     }
 
 }
