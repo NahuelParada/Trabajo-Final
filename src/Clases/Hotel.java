@@ -73,4 +73,11 @@ public class Hotel {
         return habitaciones.agregarRegistro(habitacion);
     }
 
+    public boolean eliminarUsuario(Usuario u){
+        return usuarios.eliminarRegistro(u);
+    }
+
+    public Pasajero buscarPasajero(String dni) {
+        return pasajeros.buscarPorNumero(Integer.parseInt(dni));
+    }
 }

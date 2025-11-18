@@ -126,7 +126,36 @@ public class SistemaHotel {
         return true;
     }
 
+    /// USUARIOS
+    public boolean crearAdministrador(Administrador admin, Usuario u) throws AccesoNoAutorizadoException{
+        if(!(u instanceof Administrador)){
+            throw new AccesoNoAutorizadoException("Solo un administrador puede crear usuarios");
+        }
 
+        return hotel.agregarUsuario(admin);
+    }
 
+    public boolean crearRecepcionista(Recepcionista rec,Usuario u) throws AccesoNoAutorizadoException {
+        if(!(u instanceof Administrador)){
+            throw new AccesoNoAutorizadoException("Solo un administrador puede crear usuarios");
+        }
+        return hotel.agregarUsuario(rec);
+    }
+
+    public boolean eliminarUsuario(Usuario u1, Usuario usuarioAeliminar) throws AccesoNoAutorizadoException {
+        if(!(u1 instanceof Administrador)){
+            throw new AccesoNoAutorizadoException("Solo un administrador puede eliminar usuarios");
+        }
+        return hotel.eliminarUsuario(usuarioAeliminar);
+    }
+
+    /// PASAJEROS
+    public boolean agregarPasajero(Pasajero p) {
+        return hotel.agregarPasajero(p);
+    }
+
+    public Pasajero buscarPasajero(String dni) {
+        return hotel.buscarPasajero(dni);
+    }
 
 }

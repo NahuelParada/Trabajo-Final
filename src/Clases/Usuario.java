@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public abstract class Usuario implements  Identificador {
     /// Atributos
+
     private String nombre;
     private String contraseña;
 

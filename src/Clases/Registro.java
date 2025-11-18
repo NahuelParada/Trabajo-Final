@@ -1,7 +1,6 @@
 package Clases;
 
 import Interfaces.Identificador;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -29,15 +28,16 @@ public class Registro <T extends Identificador>  {
     public boolean eliminarRegistro(T item){ return registro.remove(item); }
 
     //Busca por numero un objeto en la lista y lo elimina
-    public void eliminarRegistroPorId(int id){
+    public boolean eliminarRegistroPorId(int id){
         Iterator<T> lista = registro.iterator();
 
         while(lista.hasNext()){
             T item = lista.next();
             if(item.getIdentificador() == id){
-                 registro.remove(item);
+                 return registro.remove(item);
             }
         }
+        return false;
     }
 
     public T buscarPorNumero(int id){
