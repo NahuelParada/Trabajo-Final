@@ -17,14 +17,6 @@ public class Registro <T extends Identificador> implements Iterable<T> {
     }
 
 
-    public String mostrarLista(){
-        String info = "";
-        for(T item: registro){
-            info += item.toString();
-        }
-        return info;
-    }
-
     public boolean agregarRegistro(T item){ return registro.add(item); }
 
     public boolean eliminarRegistro(T item){ return registro.remove(item); }

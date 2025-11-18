@@ -91,5 +91,15 @@ public class Hotel {
         return habNoDisponible.toString();
     }
 
+    public Habitacion buscarHabitacionPorNumero(int numHab){
+       return habitaciones.buscarPorNumero(numHab);
+    }
 
+    public Reserva buscarReserva(int idReserva){
+        return reservas.buscarPorNumero(idReserva);
+    }
+
+    public boolean eliminarReserva(Reserva reserva){
+        return reservas.eliminarRegistro(reserva);
+    }
 }

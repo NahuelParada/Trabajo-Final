@@ -1,10 +1,12 @@
 package Clases;
 
 import Enums.EstadoHabitacion;
+import Enums.MetodoPago;
 import Excepciones.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class SistemaHotel {
     /// Atributo
@@ -27,33 +29,48 @@ public class SistemaHotel {
     }
 
     /// RESERVAS
+    /// Consultar si con las excepciones no hace falta un retorno falso
 
-    public Reserva crearReserva(Pasajero p, int numHab, LocalDate fechaInicio, LocalDate fechaFin, Usuario u)throws HabitacionNoDisponibleException, NullPointerException, AccesoNoAutorizadoException {
-        Habitacion hab = hotel.getHabitaciones().buscarPorNumero(numHab);
+    public Reserva crearReserva(Pasajero p, MetodoPago pago, int numHab, LocalDate fechaInicio, LocalDate fechaFin, Usuario u)throws HabitacionNoDisponibleException, NullPointerException, AccesoNoAutorizadoException, PasajeroNoValidoException {
+        LocalDate fechaActual = LocalDate.now();
+
+        Habitacion hab = hotel.buscarHabitacionPorNumero(numHab);
+
+        /// Comprobacion fechas
+        if (fechaInicio.isBefore(fechaActual)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser anterior a hoy");
+        }
+
+        if (!fechaFin.isAfter(fechaInicio)) {
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
+        }
+        /// Compruebo que el pasajero sea valido
+        if (p == null) {
+            throw new PasajeroNoValidoException("Pasajero nulo");
+        }
         /// Compruebo si la reserva existe
-        if(hab == null){
+        if (hab == null) {
             throw new NullPointerException("Habitacion no encontrada");
         }
         /// Compruebo estado de la habitacion
-        if(!hab.disponibleParaReserva()){
-            throw new HabitacionNoDisponibleException("Habitacion no disponible( estado :"+ hab.getEstado() +")");
+        if (!hab.disponibleParaReserva()) {
+            throw new HabitacionNoDisponibleException("Habitacion no disponible( estado :" + hab.getEstado() + ")");
         }
         /// Compruebo si el usuario sea un recepcionista
-        if(!(u instanceof Recepcionista)){
-            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
+        if (!(u instanceof Recepcionista)) {
+            throw new AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
         }
 
-        Reserva r = new Reserva(null, fechaInicio,fechaFin,p,hab);
+        Reserva r = new Reserva(pago, fechaInicio, fechaFin, p, hab);
 
         hotel.agregarReserva(r);
         hab.setEstado(EstadoHabitacion.RESERVADA);
 
         return r;
-
     }
 
     public boolean cancelarReserva(int id, Usuario u)throws ReservaNoEncontradaException, AccesoNoAutorizadoException {
-        Reserva r = hotel.getReservas().buscarPorNumero(id);
+        Reserva r = hotel.buscarReserva(id);
         /// Compruebo si la reserva existe
         if(r == null){
             throw new ReservaNoEncontradaException("La reserva con ID " + id +" no existe.");
@@ -64,13 +81,13 @@ public class SistemaHotel {
         }
 
         r.getHabitacion().setEstado(EstadoHabitacion.LIBRE);
-        return hotel.getReservas().eliminarRegistro(r);
+        return hotel.eliminarReserva(r);
     }
 
     /// CheckIn & CheckOut
 
     public boolean realizarCheckIN (int idReserva ,Usuario u) throws ReservaNoEncontradaException, AccesoNoAutorizadoException, HabitacionNoDisponibleException {
-        Reserva r = hotel.getReservas().buscarPorNumero(idReserva);
+        Reserva r = hotel.buscarReserva(idReserva);
         /// Compruebo si la reserva existe
         if (r == null) {
             throw new ReservaNoEncontradaException("La reserva con ID " + idReserva + " no existe.");
@@ -87,7 +104,7 @@ public class SistemaHotel {
         r.getHabitacion().setEstado(EstadoHabitacion.OCUPADA);
         return true;
     }
-
+/*
     public boolean realizarCheckOut(int idReserva, Usuario u) throws ReservaNoEncontradaException, AccesoNoAutorizadoException, HabitacionNoDisponibleException {
         Reserva r = hotel.getReservas().buscarPorNumero(idReserva);
 
@@ -183,5 +200,5 @@ public class SistemaHotel {
     public Pasajero buscarPasajero(String dni) {
         return hotel.getPasajeros().buscarPorNumero(Integer.parseInt(dni));
     }
-
+*/
 }
