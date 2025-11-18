@@ -1,12 +1,14 @@
 package Clases;
 
 import Interfaces.Identificador;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 
 
 //Agrego la interfaz al objeto generico para que estos metodos solo funcionen con Registros de clases que implementen dicha interfaz
-public class Registro <T extends Identificador>  {
+public class Registro <T extends Identificador> implements Iterable<T> {
     /// Atriburto
     private HashSet<T> registro;
     /// Constructor
@@ -56,10 +58,10 @@ public class Registro <T extends Identificador>  {
         return registro.contains(item);
     }
 
-    /// Consultar
 
-    public HashSet<T> listarTodos() {
-        return new HashSet<>(registro);
+    @Override
+    public Iterator<T> iterator() {
+        return Collections.unmodifiableSet(registro).iterator();
     }
 
 }

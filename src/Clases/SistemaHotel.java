@@ -16,30 +16,15 @@ public class SistemaHotel {
         this.hotel = new Hotel(nombre, direccion);
     }
 
-    /// HABITACIONES MAL RETORNAR STRING
+    /// HABITACIONES
 
-    public HashSet<Habitacion> listarHabitacionesDisponibles(){
-        HashSet<Habitacion> Disponibles = new HashSet<>();
-
-        for (Habitacion h: hotel.getHabitaciones().listarTodos()){
-            if(h.disponibleParaReserva()){
-                Disponibles.add(h);
-            }
-        }
-        return Disponibles;
+    public String listarHabitacionesDisponibles(){
+        return hotel.listarHabitacionesDisponibles();
     }
 
-    public HashSet<Habitacion> listarHabitacionesNoDisponibles(){
-        HashSet<Habitacion> noDisponibles = new HashSet<>();
-
-        for (Habitacion h: hotel.getHabitaciones().listarTodos()){
-            if(!h.disponibleParaReserva()){
-                noDisponibles.add(h);
-            }
-        }
-        return noDisponibles;
+    public String  listarHabitacionesNoDisponibles(){
+        return hotel.listarHabitacionesNoDisponibles();
     }
-
 
     /// RESERVAS
 
