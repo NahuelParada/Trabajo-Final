@@ -1,9 +1,7 @@
 package Clases;
 
 import Enums.EstadoHabitacion;
-import Excepciones.AccesoNoAutorizadoException;
-import Excepciones.HabitacionNoDisponibleException;
-import Excepciones.ReservaNoEncontradaException;
+import Excepciones.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -127,35 +125,78 @@ public class SistemaHotel {
     }
 
     /// USUARIOS
-    public boolean crearAdministrador(Administrador admin, Usuario u) throws AccesoNoAutorizadoException{
+    public boolean crearAdministrador(Administrador admin, Usuario u) throws AccesoNoAutorizadoException, UsuarioNoValidoException{
+        /// Compruebo que el usuario que hace la accion es un admin
         if(!(u instanceof Administrador)){
             throw new AccesoNoAutorizadoException("Solo un administrador puede crear usuarios");
+        }
+        /// Compruebo que ambos usuarios no sean nulos
+        if(admin == null || u == null){
+            throw new UsuarioNoValidoException("El usuario que ingreso es nulo");
         }
 
         return hotel.agregarUsuario(admin);
     }
 
-    public boolean crearRecepcionista(Recepcionista rec,Usuario u) throws AccesoNoAutorizadoException {
+    public boolean crearRecepcionista(Recepcionista rec,Usuario u) throws AccesoNoAutorizadoException, UsuarioNoValidoException {
+        /// Compruebo que el usuario que hace la accion es un admin
         if(!(u instanceof Administrador)){
             throw new AccesoNoAutorizadoException("Solo un administrador puede crear usuarios");
+        }
+        /// Compruebo que ambos usuarios no sean nulos
+        if(rec == null || u == null){
+            throw new UsuarioNoValidoException("El usuario que ingreso es nulo");
         }
         return hotel.agregarUsuario(rec);
     }
 
-    public boolean eliminarUsuario(Usuario u1, Usuario usuarioAeliminar) throws AccesoNoAutorizadoException {
+    public boolean eliminarRecepcionista(Usuario u1, Usuario RecepcionistaAeliminar) throws AccesoNoAutorizadoException, UsuarioNoValidoException {
+        /// Compruebo que el usuario que hace la accion es un admin
         if(!(u1 instanceof Administrador)){
             throw new AccesoNoAutorizadoException("Solo un administrador puede eliminar usuarios");
         }
-        return hotel.eliminarUsuario(usuarioAeliminar);
+        /// Compruebo que el usuario a eliminar sea un Recepcionista
+        if(!(RecepcionistaAeliminar instanceof Recepcionista)){
+            throw new UsuarioNoValidoException("El usuario que desea eliminar no es un receptorista");
+        }
+        /// Compruebo que ambos usuarios no sean nulos
+        if(RecepcionistaAeliminar == null || u1 == null){
+            throw new UsuarioNoValidoException("El usuario que ingreso es nulo");
+        }
+
+
+        return hotel.getUsuarios().eliminarRegistro(RecepcionistaAeliminar);
+    }
+
+    public boolean eliminarAdministrador(Usuario u1, Usuario AdminAEliminar) throws AccesoNoAutorizadoException, UsuarioNoValidoException {
+        /// Compruebo que el usuario que hace la accion es un admin
+        if(!(u1 instanceof Administrador)){
+            throw new AccesoNoAutorizadoException("Solo un administrador puede eliminar usuarios");
+        }
+        /// Compruebo que el usuario a eliminar sea un Admin
+        if(!(AdminAEliminar instanceof Administrador)){
+            throw new UsuarioNoValidoException("El usuario que desea eliminar no es un administrador");
+        }
+        /// Compruebo que ambos usuarios no sean nulos
+        if(AdminAEliminar == null || u1 == null){
+            throw new UsuarioNoValidoException("El usuario que ingreso es nulo");
+        }
+
+        return hotel.getUsuarios().eliminarRegistro(AdminAEliminar);
     }
 
     /// PASAJEROS
-    public boolean agregarPasajero(Pasajero p) {
+    public boolean agregarPasajero(Pasajero p)throws PasajeroNoValidoException {
+        /// Comprobar de que el pasajero no sea nulo
+        if(p == null){
+            throw new PasajeroNoValidoException("El pasajero que ingreso es nulo");
+        }
+
         return hotel.agregarPasajero(p);
     }
-
+    /// CONSULTAR MAÑANA SOBRE GETTERS EN LA CLASE HOTEL SI ROMPE EL ENCAPSULAMIENTO
     public Pasajero buscarPasajero(String dni) {
-        return hotel.buscarPasajero(dni);
+        return hotel.getPasajeros().buscarPorNumero(Integer.parseInt(dni));
     }
 
 }
