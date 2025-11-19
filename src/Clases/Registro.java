@@ -56,4 +56,10 @@ public class Registro <T extends Identificador> implements Iterable<T> {
         return Collections.unmodifiableSet(registro).iterator();
     }
 
+    /// Getter
+
+    public HashSet<T> getRegistro() {
+        return registro;
+    }
+
 }
