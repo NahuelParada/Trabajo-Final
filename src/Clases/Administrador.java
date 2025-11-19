@@ -53,6 +53,7 @@ public class Administrador extends Usuario implements Identificador {
         return this.id;
     }
 
+
     /// SERIALIZACION
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

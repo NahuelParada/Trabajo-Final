@@ -63,21 +63,19 @@ public class Pasajero implements Identificador {
     }
 
     /// SERIALIZACION
-
     public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-        obj.put("dni", dni);
-        obj.put("nombre", nombre);
-        obj.put("apellido", apellido);
-        obj.put("gmail", gmail);
-        obj.put("telefono", telefono);
-        obj.put("origen", origen);
-        obj.put("domicilio", domicilio);
-        return obj;
+        JSONObject json = new JSONObject();
+        json.put("dni", dni);
+        json.put("nombre", nombre);
+        json.put("apellido", apellido);
+        json.put("gmail", gmail);
+        json.put("telefono", telefono);
+        json.put("origen", origen);
+        json.put("domicilio", domicilio);
+        return json;
     }
 
     /// DESERIALIZACION
-
     public Pasajero(JSONObject obj) {
         this.dni = obj.getString("dni");
         this.nombre = obj.getString("nombre");

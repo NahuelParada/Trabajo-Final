@@ -64,13 +64,14 @@ public class Recepcionista extends Usuario implements Identificador {
         return this.id;
     }
 
+    /// SERIALIZACION
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("id", id);
         json.put("nombre", getNombre());
         json.put("contraseña", getContraseña());
         json.put("turno", turno.toString());
-        json.put("tipo", "Recepcionista");
+        json.put("tipo", "recepcionista");
         return json;
     }
 

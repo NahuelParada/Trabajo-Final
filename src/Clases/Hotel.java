@@ -1,8 +1,7 @@
 package Clases;
 
+import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.text.html.HTMLDocument;
 import java.time.LocalDate;
@@ -27,24 +26,14 @@ public class Hotel {
         this.habitaciones = new Registro<>();
     }
 
-    /// Getter y Setter
-
-
-    public Registro<Habitacion> getHabitaciones() {
-        return habitaciones;
+    public String getNombre() {
+        return nombre;
     }
 
-    public Registro<Reserva> getReservas() {
-        return reservas;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public Registro<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public Registro<Pasajero> getPasajeros() {
-        return pasajeros;
-    }
 
     /// METODOS
     public boolean agregarReserva(Reserva reserva){
@@ -75,78 +64,71 @@ public class Hotel {
         return habitaciones.agregarRegistro(habitacion);
     }
 
-    public boolean verificarDisponible(Habitacion habitacion){
-        return habitacion.disponibilidad();
+    public boolean eliminarUsuario(Usuario u){
+        return usuarios.eliminarRegistro(u);
     }
 
-    /// SERIALIZACION
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-
-        json.put("nombre", nombre);
-        json.put("direccion", direccion);
-
-        JSONArray arrayUsuarios = new JSONArray();
-        for (Usuario u : usuarios.listarTodos())
-            arrayUsuarios.put(u.toJson());
-        json.put("usuarios", arrayUsuarios);
-
-        JSONArray arrayPasajeros = new JSONArray();
-        for (Pasajero p : pasajeros.listarTodos())
-            arrayPasajeros.put(p.toJson());
-        json.put("pasajeros", arrayPasajeros);
-
-        JSONArray arrayHabitaciones = new JSONArray();
-        for (Habitacion h : habitaciones.listarTodos())
-            arrayHabitaciones.put(h.toJson());
-        json.put("habitaciones", arrayHabitaciones);
-
-        JSONArray arrayReservas = new JSONArray();
-        for (Reserva r : reservas.listarTodos())
-            arrayReservas.put(r.toJson());
-        json.put("reservas", arrayReservas);
-
-        return json;
+    public Pasajero buscarPasajero(String dni) {
+        return pasajeros.buscarPorNumero(Integer.parseInt(dni));
     }
 
-    /// DESERIALIZACION
-    public Hotel(JSONObject obj) {
-        this.nombre = obj.getString("nombre");
-        this.direccion = obj.getString("direccion");
-
-        this.reservas = new Registro<>();
-        JSONArray arrayReservas = obj.getJSONArray("reservas");
-        for (int i = 0; i < arrayReservas.length(); i++)
-            reservas.agregarRegistro(new Reserva(arrayReservas.getJSONObject(i)));
-
-        this.usuarios = new Registro<>();
-        JSONArray arrayUsuarios = obj.getJSONArray("usuarios");
-        for (int i = 0; i < arrayUsuarios.length(); i++) {
-
-            JSONObject ujson = arrayUsuarios.getJSONObject(i);
-            String tipo = ujson.getString("tipo");
-
-            Usuario u;
-
-            if (tipo.equals("Administrador"))
-                u = new Administrador(ujson);
-            else if (tipo.equals("Recepcionista"))
-                u = new Recepcionista(ujson);
-            else
-                throw new RuntimeException("Tipo de usuario no reconocido: " + tipo);
-
-            usuarios.agregarRegistro(u);
+    public String listarHabitacionesDisponibles() {
+        StringBuilder habDisponible = new StringBuilder();
+        for(Habitacion h : habitaciones){
+            if(h.getEstado() == EstadoHabitacion.LIBRE){
+                habDisponible.append(h.toString()).append("\n");
+            }
         }
-
-        this.pasajeros = new Registro<>();
-        JSONArray arrayPasajeros = obj.getJSONArray("pasajeros");
-        for (int i = 0; i < arrayPasajeros.length(); i++)
-            pasajeros.agregarRegistro(new Pasajero(arrayPasajeros.getJSONObject(i)));
-
-        this.habitaciones = new Registro<>();
-        JSONArray arrayHabitaciones = obj.getJSONArray("habitaciones");
-        for (int i = 0; i < arrayHabitaciones.length(); i++)
-            habitaciones.agregarRegistro(new Habitacion(arrayHabitaciones.getJSONObject(i)));
+        return habDisponible.toString();
     }
+
+    public String listarHabitacionesNoDisponibles() {
+        StringBuilder habNoDisponible = new StringBuilder();
+        for(Habitacion h : habitaciones){
+            if(h.getEstado() == EstadoHabitacion.OCUPADA || h.getEstado() == EstadoHabitacion.RESERVADA){
+                habNoDisponible.append(h.toString()).append("\n");
+            }
+        }
+        return habNoDisponible.toString();
+    }
+
+    public Habitacion buscarHabitacionPorNumero(int numHab){
+       return habitaciones.buscarPorNumero(numHab);
+    }
+
+    public Reserva buscarReserva(int idReserva){
+        return reservas.buscarPorNumero(idReserva);
+    }
+
+    public boolean eliminarReserva(Reserva reserva){
+        return reservas.eliminarRegistro(reserva);
+    }
+
+
+    public boolean hacerCheckIn(int id) {
+        Reserva r = buscarReserva(id);
+        r.setEstadoHabitacionReserva(EstadoHabitacion.OCUPADA);
+        return true;
+    }
+
+    public boolean hacerCheckOut(int id) {
+        Reserva r = buscarReserva(id);
+        Habitacion h = r.getHabitacion();
+        if(h.getEstado() == EstadoHabitacion.OCUPADA) {
+            r.setEstadoHabitacionReserva(EstadoHabitacion.MANTENIMIENTO);
+            return true;
+        }
+        return false;
+    }
+
+    public double calcularRecaudacionTotalEnReservas() {
+        double total = 0;
+        for(Reserva r : reservas){
+             total += r.calcularCosto();
+
+        }
+        return total;
+    }
+
 
 }

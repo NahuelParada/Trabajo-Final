@@ -48,6 +48,10 @@ public class Reserva implements Identificador {
         return noches * habitacion.getPrecioXNoche();
     }
 
+    public void setEstadoHabitacionReserva(EstadoHabitacion estadoHabitacion) {
+        habitacion.setEstado(estadoHabitacion);
+    }
+
     ///Equals & Hashcode
 
     @Override
@@ -83,20 +87,18 @@ public class Reserva implements Identificador {
     }
 
     /// SERIALIZACION
-
     public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-        obj.put("idReserva", idReserva);
-        obj.put("pago", pago.toString());
-        obj.put("fechaInicio", fechaInicio.toString());
-        obj.put("fechaFin", fechaFin.toString());
-        obj.put("pasajero", pasajero.toJson());
-        obj.put("habitacion", habitacion.toJson());
-        return obj;
+        JSONObject json = new JSONObject();
+        json.put("idReserva", idReserva);
+        json.put("pago", pago.toString());
+        json.put("fechaInicio", fechaInicio.toString());
+        json.put("fechaFin", fechaFin.toString());
+        json.put("pasajero", pasajero.toJson());
+        json.put("habitacion", habitacion.toJson());
+        return json;
     }
 
     /// DESERIALIZACION
-
     public Reserva(JSONObject obj) {
         this.idReserva = obj.getInt("idReserva");
         this.pago = MetodoPago.valueOf(obj.getString("pago"));
@@ -104,7 +106,7 @@ public class Reserva implements Identificador {
         this.fechaFin = LocalDate.parse(obj.getString("fechaFin"));
         this.pasajero = new Pasajero(obj.getJSONObject("pasajero"));
         this.habitacion = new Habitacion(obj.getJSONObject("habitacion"));
-        if (idReserva >= contador) contador = idReserva + 1;
     }
+
 
 }

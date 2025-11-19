@@ -26,32 +26,12 @@ public class Habitacion implements Identificador {
         return estado;
     }
 
-    public void setEstado(EstadoHabitacion estado) {
-        this.estado = estado;
-    }
+    public void setEstado(EstadoHabitacion estado) {    this.estado = estado;}
 
     public double getPrecioXNoche() {
         return precioXNoche;
     }
 
-    public void setPrecioXNoche(double precioXNoche) {
-        this.precioXNoche = precioXNoche;
-    }
-
-    public TipoHabitacion getTipo() {
-        return tipo;
-    }
-
-    public int getNumHabitacion() {
-        return numHabitacion;
-    }
-
-    public boolean disponibilidad(){
-        if(estado == EstadoHabitacion.OCUPADA || estado == EstadoHabitacion.MANTENIMIENTO ||estado == EstadoHabitacion.RESERVADA){
-            return false;
-        }
-        return true;
-    }
 
     /// Interfaz
 
@@ -87,18 +67,16 @@ public class Habitacion implements Identificador {
     }
 
     /// SERIALIZACION
-
     public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-        obj.put("numHabitacion", numHabitacion);
-        obj.put("tipo", tipo.toString());
-        obj.put("estado", estado.toString());
-        obj.put("precioXNoche", precioXNoche);
-        return obj;
+        JSONObject json = new JSONObject();
+        json.put("numHabitacion", numHabitacion);
+        json.put("tipo", tipo.toString());
+        json.put("estado", estado.toString());
+        json.put("precioXNoche", precioXNoche);
+        return json;
     }
 
     /// DESERIALIZACION
-
     public Habitacion(JSONObject obj) {
         this.numHabitacion = obj.getInt("numHabitacion");
         this.tipo = TipoHabitacion.valueOf(obj.getString("tipo"));

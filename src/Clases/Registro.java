@@ -1,13 +1,14 @@
 package Clases;
 
 import Interfaces.Identificador;
-import java.util.ArrayList;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 
 
 //Agrego la interfaz al objeto generico para que estos metodos solo funcionen con Registros de clases que implementen dicha interfaz
-public class Registro <T extends Identificador>  {
+public class Registro <T extends Identificador> implements Iterable<T> {
     /// Atriburto
     private HashSet<T> registro;
     /// Constructor
@@ -16,28 +17,21 @@ public class Registro <T extends Identificador>  {
     }
 
 
-    public String mostrarLista(){
-        String info = "";
-        for(T item: registro){
-            info += item.toString();
-        }
-        return info;
-    }
-
     public boolean agregarRegistro(T item){ return registro.add(item); }
 
     public boolean eliminarRegistro(T item){ return registro.remove(item); }
 
     //Busca por numero un objeto en la lista y lo elimina
-    public void eliminarRegistroPorId(int id){
+    public boolean eliminarRegistroPorId(int id){
         Iterator<T> lista = registro.iterator();
 
         while(lista.hasNext()){
             T item = lista.next();
             if(item.getIdentificador() == id){
-                 registro.remove(item);
+                 return registro.remove(item);
             }
         }
+        return false;
     }
 
     public T buscarPorNumero(int id){
@@ -56,10 +50,10 @@ public class Registro <T extends Identificador>  {
         return registro.contains(item);
     }
 
-    /// Consultar
 
-    public HashSet<T> listarTodos() {
-        return new HashSet<>(registro);
+    @Override
+    public Iterator<T> iterator() {
+        return Collections.unmodifiableSet(registro).iterator();
     }
 
     /// Getter
