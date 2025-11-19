@@ -28,6 +28,16 @@ public class SistemaHotel {
         return hotel.listarHabitacionesNoDisponibles();
     }
 
+    public Habitacion crearHabitacion(Habitacion hab)throws NullPointerException{
+
+        if (hab == null) {
+            throw new NullPointerException("Datos no encontrados");
+        }
+
+        hotel.agregarHabitacion(hab);
+        return hab;
+    }
+
     /// RESERVAS
     /// Consultar si con las excepciones no hace falta un retorno falso
 
@@ -59,6 +69,7 @@ public class SistemaHotel {
 
         Reserva r = new Reserva(pago, fechaInicio, fechaFin, p, hab);
 
+        hotel.agregarPasajero(p);
         hotel.agregarReserva(r);
         hab.setEstado(EstadoHabitacion.RESERVADA);
 
