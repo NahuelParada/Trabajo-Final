@@ -3,6 +3,7 @@ package Clases;
 import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
 import Excepciones.*;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -198,6 +199,21 @@ public class SistemaHotel {
 
     public double calcularRecaudacionTotal() {
         return hotel.calcularRecaudacionTotalEnReservas();
+    }
+
+    /// SERIALIZADOR
+
+    public void guardarHotel(String archivo) {
+        JSONObject jsonHotel = hotel.toJson();
+        JSONUtiles.uploadJSON(jsonHotel, archivo);
+    }
+
+    /// DESERIALIZADOR
+
+    public void cargarHotel(String archivo) {
+        String contenido = JSONUtiles.downloadJSON(archivo);
+        JSONObject jsonHotel = new JSONObject(contenido);
+        this.hotel = new Hotel(jsonHotel);
     }
 
 }

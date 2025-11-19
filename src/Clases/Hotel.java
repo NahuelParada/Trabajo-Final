@@ -145,9 +145,9 @@ public class Hotel {
             JSONObject obj = u.toJson();
 
             if (u instanceof Administrador) {
-                obj.put("tipo", "ADMIN");
+                obj.put("tipo", "Administrador");
             } else {
-                obj.put("tipo", "RECEPCIONISTA");
+                obj.put("tipo", "Recepcionista");
             }
 
             arrayUsuarios.put(obj);
