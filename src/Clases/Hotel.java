@@ -2,6 +2,8 @@ package Clases;
 
 import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.text.html.HTMLDocument;
 import java.time.LocalDate;
@@ -128,6 +130,79 @@ public class Hotel {
 
         }
         return total;
+    }
+
+    /// SERIALIZADOR
+    public JSONObject toJson() {
+
+        JSONObject json = new JSONObject();
+
+        json.put("nombre", nombre);
+        json.put("direccion", direccion);
+
+        JSONArray arrayUsuarios = new JSONArray();
+        for (Usuario u : usuarios) {
+            JSONObject obj = u.toJson();
+
+            if (u instanceof Administrador) {
+                obj.put("tipo", "ADMIN");
+            } else {
+                obj.put("tipo", "RECEPCIONISTA");
+            }
+
+            arrayUsuarios.put(obj);
+        }
+        json.put("usuarios", arrayUsuarios);
+
+        JSONArray arrayPasajeros = new JSONArray();
+        for (Pasajero p : pasajeros)
+            arrayPasajeros.put(p.toJson());
+        json.put("pasajeros", arrayPasajeros);
+
+        JSONArray arrayHabitaciones = new JSONArray();
+        for (Habitacion h : habitaciones)
+            arrayHabitaciones.put(h.toJson());
+        json.put("habitaciones", arrayHabitaciones);
+
+        JSONArray arrayReservas = new JSONArray();
+        for (Reserva r : reservas)
+            arrayReservas.put(r.toJson());
+        json.put("reservas", arrayReservas);
+
+        return json;
+    }
+
+    /// DESERIALIZACION
+    public Hotel(JSONObject obj) {
+        this.nombre = obj.getString("nombre");
+        this.direccion = obj.getString("direccion");
+
+        this.usuarios = new Registro<>();
+        JSONArray arrayUsuarios = obj.getJSONArray("usuarios");
+        for (int i = 0; i < arrayUsuarios.length(); i++) {
+            JSONObject uJson = arrayUsuarios.getJSONObject(i);
+            String tipo = uJson.getString("tipo");
+
+            if (tipo.equals("Administrador"))
+                usuarios.agregarRegistro(new Administrador(uJson));
+            else if (tipo.equals("Recepcionista"))
+                usuarios.agregarRegistro(new Recepcionista(uJson));
+        }
+
+        this.pasajeros = new Registro<>();
+        JSONArray arrayPasajeros = obj.getJSONArray("pasajeros");
+        for (int i = 0; i < arrayPasajeros.length(); i++)
+            pasajeros.agregarRegistro(new Pasajero(arrayPasajeros.getJSONObject(i)));
+
+        this.habitaciones = new Registro<>();
+        JSONArray arrayHabitaciones = obj.getJSONArray("habitaciones");
+        for (int i = 0; i < arrayHabitaciones.length(); i++)
+            habitaciones.agregarRegistro(new Habitacion(arrayHabitaciones.getJSONObject(i)));
+
+        this.reservas = new Registro<>();
+        JSONArray arrayReservas = obj.getJSONArray("reservas");
+        for (int i = 0; i < arrayReservas.length(); i++)
+            reservas.agregarRegistro(new Reserva(arrayReservas.getJSONObject(i)));
     }
 
 
