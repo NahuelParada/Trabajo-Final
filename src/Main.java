@@ -1,12 +1,16 @@
 import Clases.*;
+import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
+import Enums.TipoHabitacion;
+import Enums.Turno;
+import Excepciones.*;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.swing.*;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Scanner;
+
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -26,11 +30,11 @@ public class Main {
             System.out.printf("Ingrese su Contraseña: ");
             String contraseñaUs = sc.nextLine();
 
-            acceso = IniciarSesionAdministradorSupremo(nombreUs, contraseñaUs);
+            acceso = IniciarSesionUsuario(nombreUs, contraseñaUs);
 
             if(acceso == false)
             {
-                System.out.println("Nombre u Contraseña Incorrecto");
+                System.out.println("Nombre o Contraseña Incorrecto");
             }
         }
 
@@ -49,15 +53,16 @@ public class Main {
             /// En teoria deberia haber una funcion que agrege el Usuario Principal a la lista ya que es otro Usuario
 
             JSONObject objJSON = new JSONObject();
-            objJSON.put("nombreHotel", nombreHotel);
-            objJSON.put("direccion Hotel", direccionHotel);
+            objJSON.put("nombre", nombreHotel);
+            objJSON.put("direccion", direccionHotel);
             JSONUtiles.uploadJSON(objJSON, "DataHotel");
         }
         else
         {
             String contenido_json = JSONUtiles.downloadJSON("DataHotel");
             JSONObject objJSON = new JSONObject(contenido_json);
-            gestionador_hotel = new SistemaHotel(objJSON.getString("Nombre"), objJSON.getString("Direccion"));
+            gestionador_hotel = new SistemaHotel(objJSON.getString("nombre"), objJSON.getString("direccion"));
+
         }
 
         int opcion = 0;
@@ -76,6 +81,11 @@ public class Main {
             System.out.println("9. Eliminar un Administrador");
             System.out.println("10. Eliminar un Recepcionista");
             System.out.println("11. Agregar un Pasajero");
+            System.out.println("12. Buscar un Pasajero");
+            System.out.println("13. Calcular recaudacion Total");
+            System.out.println("14. Guardar contenido en un Archivo");
+            System.out.println("15. Cargar contenido en un Archivo");
+            System.out.println("16. Crear una Habitacion");
             System.out.println("0. Salir del Sistema");
 
             System.out.printf("\n\n");
@@ -86,237 +96,111 @@ public class Main {
             switch (opcion)
             {
                 case 1:
-                    System.out.println(gestionador_hotel.listarHabitacionesDisponibles());
+                    if(gestionador_hotel.listarHabitacionesDisponibles().equals(""))
+                    {
+                        System.out.println("No hay Habitaicones Disponibles");
+                    }
+                    else
+                    {
+                        System.out.println(gestionador_hotel.listarHabitacionesDisponibles());
+                    }
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
                 break;
                 case 2:
-                    System.out.println(gestionador_hotel.listarHabitacionesNoDisponibles());
+                    if(gestionador_hotel.listarHabitacionesNoDisponibles().equals(""))
+                    {
+                        System.out.println("No hay Habitaicones Disponibles");
+                    }
+                    else
+                    {
+                        System.out.println(gestionador_hotel.listarHabitacionesNoDisponibles());
+                    }
                 break;
                 case 3:
-                    crearUsuario(sc, gestionador_hotel);
+                    crearReserva(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
                 break;
                 case 4:
-                    /// Modificar el Metodo
+                    cancelarReserva(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
                 break;
                 case 5:
-                    /// Modificar el Metodo
+                    crearCheckIn(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
                 break;
+                case 6:
+                    crearCheckOut(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 7:
+                    crearNuevoAdministrador(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 8:
+                    crearNuevoRecepcionista(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 9:
+                    eliminarUnAdministrador(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 10:
+                    eliminarUnRecepcionista(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 11:
+                    agregarPasajero(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 12:
+                    buscarPasajero(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 13:
+                    System.out.println(recaudacionTotal(gestionador_hotel));
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 14:
+                    serializar(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 15:
+                    deserealizar(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 16:
+                    agregarHabitacion(sc, gestionador_hotel);
+                    System.out.printf("Precione enter para volver al menu");
+                    sc.nextLine();
+                    break;
+                case 0:
+                    System.out.printf("Escriba (si) Si desea Salir del Sistema de Hotel: ");
+                    String seguridad = sc.nextLine();
+                    if(seguridad.equalsIgnoreCase("si"))
+                    {
+                        System.out.println("Saliendo del Sistema");
+                        acceso = false;
+                    }
+                    break;
+                default:
+                    System.out.println("Opcion no valida");
             }
         }
 
-        /*int opciones = sc.nextInt();
-        sc.nextLine();
-
-        if()
-
-
-        switch(opciones)
-        {
-            case 1:
-
-
-
-            break;
-        }
-
-        /// Clase Hotel Unica
-        Hotel hotel = new Hotel("Hoteleria Cielos y Mares", "Barrio Alberdi 5404");
-
-        /// El Sistema debe tener un Usuario para que pueda agregar Administradores y Recepcionistas
-        Administrador AdministradorSupremo = new Administrador("Paulo Rucks", "dinosaurio123");
-        Recepcionista RecepcionistaSupremo = new Recepcionista(Turno.TARDE, "tiro34lor", "eltoro789");
-
-        /// Vamos a agregarlos
-        hotel.agregarUsuario(AdministradorSupremo);
-        hotel.agregarUsuario(RecepcionistaSupremo);
-
-        /// Habitaciones Estandar
-        Habitacion hab1 = new Habitacion(1, TipoHabitacion.ESTANDAR, EstadoHabitacion.LIBRE, 105450.75);
-        Habitacion hab2 = new Habitacion(2, TipoHabitacion.ESTANDAR, EstadoHabitacion.OCUPADA, 105450.75);
-        Habitacion hab3 = new Habitacion(3, TipoHabitacion.ESTANDAR, EstadoHabitacion.MANTENIMIENTO, 105450.75);
-        Habitacion hab4 = new Habitacion(4, TipoHabitacion.ESTANDAR, EstadoHabitacion.OCUPADA, 105450.75);
-        Habitacion hab5 = new Habitacion(5, TipoHabitacion.ESTANDAR, EstadoHabitacion.RESERVADA, 105450.75);
-        /// Habitaciones EstandarPlus
-        Habitacion hab6 = new Habitacion(6, TipoHabitacion.ESTANDARPLUS, EstadoHabitacion.LIBRE, 153500.25);
-        Habitacion hab7 = new Habitacion(7, TipoHabitacion.ESTANDARPLUS, EstadoHabitacion.OCUPADA, 153500.25);
-        Habitacion hab8 = new Habitacion(8, TipoHabitacion.ESTANDARPLUS, EstadoHabitacion.LIBRE, 153500.25);
-        /// Habitaciones Suit
-        Habitacion hab9 = new Habitacion(9, TipoHabitacion.SUIT, EstadoHabitacion.OCUPADA, 176900.40);
-        Habitacion hab10 = new Habitacion(10, TipoHabitacion.SUIT, EstadoHabitacion.MANTENIMIENTO, 176900.40);
-        Habitacion hab11 = new Habitacion(11, TipoHabitacion.SUIT, EstadoHabitacion.LIBRE, 176900.40);
-
-        /// Se inserta las Habitaciones en la Clase Hotel
-        hotel.agregarHabitacion(hab1);
-        hotel.agregarHabitacion(hab2);
-        hotel.agregarHabitacion(hab3);
-        hotel.agregarHabitacion(hab4);
-        hotel.agregarHabitacion(hab5);
-        hotel.agregarHabitacion(hab6);
-        hotel.agregarHabitacion(hab7);
-        hotel.agregarHabitacion(hab8);
-        hotel.agregarHabitacion(hab9);
-        hotel.agregarHabitacion(hab10);
-        hotel.agregarHabitacion(hab11);
-
-        /// Se crea una Clase Envolvente con los parametros de el Hotel. Solo el Hotel y las Habitaciones
-        SistemaHotel hotel_envolvente = new SistemaHotel(hotel.getNombre(), hotel.getDireccion());
-
-        /// Guardamos la coleccion de Habitaciones Ocupadas y Libres
-        HashSet<Habitacion> libre = hotel_envolvente.listarHabitacionesDisponibles();
-        HashSet<Habitacion> ocupado = hotel_envolvente.listarHabitacionesNoDisponibles();
-
-        /// Hay un problema a la hora de mostrar las habitaciones y es que:
-        /// En la lista de Ocupados, tambien se muestran los de Mantenimiento:
-        /// En la lista de Disponibles, tambien se muestran los Reservados
-        System.out.println(mostrarHabitaciones(libre, "Habitaciones en Estado Libres")); ///Contenido de Habitaciones Libres
-        System.out.println(mostrarHabitaciones(ocupado, "Habitaciones en Estado Ocupados")); ///Contenido de Habitaciones Ocupadas
-        //System.out.println(mostrarHotel(hotel, "Informacion Completa de el Hotel")); ///Contenido del Hotel
-
-        /// Agregamos un pasajero
-        Pasajero p1 = new Pasajero("5038543", "Leonardo", "Paco", "SirPacoLarto35@hotmail.com", "3795436002", "Santa María de Punilla", "Cetrangolo 1432");
-        Pasajero p2 = new Pasajero("5345675", "Marta", "Cielo", "miMartita07@outlook.com.ar", "3799184673", "Santa María de Punilla", "Artigas 0754");
-
-        //Hacemos el Try/Catch para la creacion de la Reserva (POST, Las Excepciones funcionan muy bien)
-        try
-        {
-            hotel_envolvente.crearReserva(p1, 1, LocalDate.of(1994, 4, 23), LocalDate.of(1994, 5, 13), RecepcionistaSupremo);
-            System.out.println("Reservado");
-        } catch (AccesoNoAutorizadoException e) {
-            throw new RuntimeException(e);
-        } catch (HabitacionNoDisponibleException e) {
-            throw new RuntimeException(e);
-        }
-
-        try
-        {
-            hotel_envolvente.crearReserva(p2, 6, LocalDate.of(1994, 4, 23), LocalDate.of(1994, 5, 13), RecepcionistaSupremo);
-            System.out.println("Reservado");
-        } catch (AccesoNoAutorizadoException e) {
-            throw new RuntimeException(e);
-        } catch (HabitacionNoDisponibleException e) {
-            throw new RuntimeException(e);
-        }
-
-        /// Hay un problema con mostrar habitaciones y es que el cliente Reserva la habitacion pero aparece como Habitacion en estado Libre
-        System.out.println("Habitacion 6 y 1 Estan en estado Reservado");
-        System.out.println(mostrarHabitaciones(libre, "Habitaciones en Estado Libres"));
-        System.out.println(mostrarHabitaciones(ocupado, "Habitaciones en Estado Ocupados"));
-
-        /// Se puede solucionar con meter en el metodo mostrarHotel solo los estados deseados, pero no lo agrego por si no lo quieren de esa manera
-
-        /// Vamos a cancelar una de las dos Reservas (POST, las Excepciones funcionan bien)
-        try
-        {
-            /// Hay que hacer una funcion para saber las id de las Reservas Creadas
-            hotel_envolvente.cancelarReserva(1, RecepcionistaSupremo);
-            System.out.println("Reserva Cancelada");
-        } catch (AccesoNoAutorizadoException e) {
-            throw new RuntimeException(e);
-        } catch (ReservaNoEncontradaException e) {
-            throw new RuntimeException(e);
-        }
-
-        /// Chequeamos que aparesca como libre
-        System.out.println("Habitacion 1 Esta en estado Libre");
-        System.out.println(mostrarHabitaciones(libre, "Habitaciones en Estado Libres"));
-
-        /// Vamos a realizar un Check IN (POST, Funcionan bien las Excepciones pero no se como entra HabitacionNoDisponibleException)
-        try {
-            hotel_envolvente.realizarCheckIN(2, RecepcionistaSupremo);
-            System.out.println("Reserva Realizada");
-        }
-        catch (ReservaNoEncontradaException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (AccesoNoAutorizadoException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (HabitacionNoDisponibleException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        /// Chequeamos que aparesca como ocupado
-        System.out.println("Habitacion 6 Esta en estado Ocupado");
-        System.out.println(mostrarHabitaciones(libre, "Habitaciones en Estado Libres"));
-
-        /// Vamos a realizar un Check OUT (POST, Funcionan bien las Excepciones pero no se como entra HabitacionNoDisponibleException)
-        try {
-            hotel_envolvente.realizarCheckOut(2, RecepcionistaSupremo);
-            System.out.println("Reserva Realizada");
-        }
-        catch (ReservaNoEncontradaException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (AccesoNoAutorizadoException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (HabitacionNoDisponibleException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        /// Chequeamos que este libre
-        System.out.println("Habitacion 6 Esta en estado Libre");
-        System.out.println(mostrarHabitaciones(libre, "Habitaciones en Estado Libres"));
-
-        /// Crearemos nuevos Administradores y Recepcionistas
-        Administrador nuevoAdmin = new Administrador("FreddyFazbear123", "Lop342df");
-        Recepcionista nuevoRecep = new Recepcionista(Turno.MAÑANA, "MarielaVizuera03", "r594Op");
-
-        /// Intentamos crear ambos para mas rapidez(POST, Funciona el Acceso no Autorizado, pero no me toma la Excepcion de UsuarioNoValidoException)
-        /// Correjime colo con esa Excepcion, porque les meti null y sigue funcionando
-        try
-        {
-            hotel_envolvente.crearAdministrador(nuevoAdmin, AdministradorSupremo);
-            hotel_envolvente.crearRecepcionista(nuevoRecep, AdministradorSupremo);
-        } catch (AccesoNoAutorizadoException e) {
-            throw new RuntimeException(e);
-        } catch (UsuarioNoValidoException e) {
-            throw new RuntimeException(e);
-        }
-
-        /// Comprobar existencia
-        System.out.println(hotel.getUsuarios().mostrarLista());
-
-        /// Eliminarlos
-        try
-        {
-            hotel_envolvente.eliminarAdministrador(AdministradorSupremo, nuevoAdmin);
-            hotel_envolvente.eliminarRecepcionista(AdministradorSupremo, nuevoRecep);
-        } catch (AccesoNoAutorizadoException e) {
-            throw new RuntimeException(e);
-        } catch (UsuarioNoValidoException e) {
-            throw new RuntimeException(e);
-        }
-
-        /// Comprobar existencia
-        System.out.println(hotel.getUsuarios().mostrarLista());
-
-        /// Hay otro metodo que tiene que preguntar Nahuel ///*/
-
-    }
-
-    /// Metodo para Iniciar Sesion como Administrador Supremo
-    public static boolean IniciarSesionAdministradorSupremo(String nombreUs, String contraseñaUs)
-    {
-        String contenidoJson = JSONUtiles.downloadJSON("AdministradorSupremo");
-        JSONObject jsonObject = new JSONObject(contenidoJson);
-
-        String nombrePrueb = jsonObject.getString("nombre");
-        String contraseñaPrueb = jsonObject.getString("contraseña");
-
-        Administrador adminJSON = new Administrador(nombrePrueb, contraseñaPrueb);
-
-        if(adminJSON.iniciarSesion(nombreUs, contraseñaUs))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     /// Metodo para saber que el Hotel no esta vacio
@@ -335,7 +219,7 @@ public class Main {
             return false;
         }
 
-        if(contenidoJson.equals("") || contenidoJson.isEmpty())
+        if(contenidoJson.equals("") || contenidoJson.isEmpty() || contenidoJson.equals("{}"))
         {
             return false;
         }
@@ -343,27 +227,136 @@ public class Main {
         return true;
     }
 
-    /// Preguntar si es necesario que el Hotel muestre todo su Contenido
-    public static String mostrarHotel(Hotel x, String estado)
+    /// Metodo para Iniciar Sesion como Administrador Supremo
+    public static boolean IniciarSesionUsuario(String nombreUs, String contraseñaUs)
     {
-        String contenido = "\n\n"+ estado + "\n ================================================================= \n";
-        contenido += x.toString();
-        return contenido += "================================================================= \n";
+        String contenidoJson = JSONUtiles.downloadJSON("ListaUsuarios");
+        JSONArray jsonArray = new JSONArray(contenidoJson);
+
+        for(int i = 0; i < jsonArray.length(); i++)
+        {
+            JSONObject objJSON = jsonArray.getJSONObject(i);
+            String nombreAux = objJSON.getString("nombre");
+            String contraseñaAux = objJSON.getString("contraseña");
+            if(nombreAux.equalsIgnoreCase(nombreUs) && contraseñaAux.equals(contraseñaUs))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    /// Metodo para Mostrar Habitaciones
-    public static String mostrarHabitaciones(HashSet<Habitacion> x, String estado)
+    public static Usuario obtenerUsuario(String nombreUs, String contraseñaUs)
     {
-        String contenido = "\n\n"+ estado + "\n ================================================================= \n";
-        for(Habitacion h : x)
+        String contenidoJson = JSONUtiles.downloadJSON("ListaUsuarios");
+        JSONArray jsonArray = new JSONArray(contenidoJson);
+
+        for(int i = 0; i < jsonArray.length(); i++)
         {
-            contenido = contenido + h.toString() + "\n";
+            JSONObject objJSON = jsonArray.getJSONObject(i);
+            String nombreAux = objJSON.getString("nombre");
+            String contraseñaAux = objJSON.getString("contraseña");
+            String tipoAux = objJSON.getString("tipo");
+            if(nombreAux.equalsIgnoreCase(nombreUs) && contraseñaAux.equals(contraseñaUs))
+            {
+                if(tipoAux.equals("recepcionista"))
+                {
+                    String t = objJSON.getString("turno");
+                    Turno turno = Turno.valueOf(t);
+                    return new Recepcionista(turno, nombreUs, contraseñaUs);
+                }
+                else if(tipoAux.equals("administrador"))
+                {
+                    return new Administrador(nombreUs, contraseñaUs);
+                }
+            }
         }
-        return contenido += "================================================================= \n";
+
+        return null;
+    }
+
+    public static Usuario buscarUsuario(String nombreUs, String contraseñaUs)
+    {
+        String contenidoJson = JSONUtiles.downloadJSON("ListaUsuarios");
+        JSONArray jsonArray = new JSONArray(contenidoJson);
+
+        for(int i = 0; i < jsonArray.length(); i++)
+        {
+            JSONObject objJSON = jsonArray.getJSONObject(i);
+            String nombreAux = objJSON.getString("nombre");
+            String contraseñaAux = objJSON.getString("contraseña");
+            String tipo = objJSON.getString("tipo");
+            if(nombreAux.equalsIgnoreCase(nombreUs) && contraseñaAux.equals(contraseñaUs))
+            {
+                if(tipo.equalsIgnoreCase("administrador"))
+                {
+                    return new Administrador(nombreUs, contraseñaUs);
+                }
+                else if(tipo.equalsIgnoreCase("recepcionista"))
+                {
+                    String turnoString = objJSON.getString("turno");
+                    Turno turnoAux = Turno.valueOf(turnoString);
+                    return new Recepcionista(turnoAux, nombreUs, contraseñaUs);
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+    public static boolean identificarAdministradorPrincipal(String nombre, String contraseña)
+    {
+        if(buscarUsuario(nombre, contraseña).getIdentificador() == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static Turno buscarTurno(Scanner sc)
+    {
+        Turno turno = null;
+        boolean comprobacion = false;
+        while (comprobacion == false)
+        {
+            System.out.println("Tipo de Turno:");
+            System.out.println("1. Mañana");
+            System.out.println("2. Tarde");
+            System.out.println("3. Noche");
+            System.out.println("Ingrese una opcion: ");
+            int opcion = sc.nextInt();
+            sc.nextLine();
+            switch (opcion)
+            {
+                case 1:
+                    turno = Turno.MAÑANA;
+                    break;
+                case 2:
+                    turno = Turno.TARDE;
+                    break;
+                case 3:
+                    turno = Turno.NOCHE;
+                    break;
+                default:
+                    System.out.println("Ingreso una opcion Incorrecta. Vuelva a Intentarlo");
+            }
+
+            if(opcion == 1 || opcion == 2 || opcion == 3)
+            {
+                comprobacion = true;
+            }
+        }
+        return turno;
     }
 
     public static void crearReserva(Scanner sc, SistemaHotel hotel) {
-        System.out.println("======= Creando un Usuario Nuevo =======");
+        System.out.println("======= Creando una Reserva =======");
+
         System.out.printf("Ingrese Nombre Recepcionsita: ");
         String nombreRep = sc.nextLine();
         System.out.printf("Ingrese Contraseña Recepcionsita: ");
@@ -384,16 +377,15 @@ public class Main {
         System.out.printf("Domicilio: ");
         String domicilio = sc.nextLine();
 
-        System.out.println("Elige Metodo de Pago:");
-        System.out.println("1.Credito");
-        System.out.println("2.Debito");
-        System.out.println("3.Efectivo");
-        System.out.println("Escriba aqui:");
-
         MetodoPago metodoPago = null;
         boolean comprobacion = false;
         while (comprobacion == false)
         {
+            System.out.println("Elige Metodo de Pago:");
+            System.out.println("1. Tarjeta de Credito");
+            System.out.println("2. Tarjeta de Debito");
+            System.out.println("3. Efectivo");
+            System.out.println("Escriba aqui: ");
             int opcion = sc.nextInt();
             sc.nextLine();
             switch (opcion)
@@ -408,7 +400,7 @@ public class Main {
                     metodoPago = MetodoPago.EFECTIVO;
                     break;
                     default:
-                        System.out.println("ingreso una opcion Incorrecta");
+                        System.out.println("Ingreso una opcion Incorrecta. Vuelva a Intentarlo");
             }
 
             if(opcion == 1 || opcion == 2 || opcion == 3)
@@ -416,6 +408,7 @@ public class Main {
                 comprobacion = true;
             }
         }
+
 
         System.out.printf("Numero de Habitacion: ");
         int numero_habitacion = sc.nextInt();
@@ -444,9 +437,422 @@ public class Main {
         sc.nextLine();
         LocalDate fechaFinal = LocalDate.of(añoF, mesF, diaF);
 
+        /// Hacemos Try/Catch para ver si todo salio bien
+        try
+        {
+            hotel.crearReserva(new Pasajero(dni, nombre, apellido, gmail, telefono, origen, domicilio), metodoPago, numero_habitacion, fechaInicio, fechaFinal, buscarUsuario(nombreRep, contraseñaRep));
+            System.out.println("Reserva creada con exito");
+        }
+        catch (HabitacionNoDisponibleException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch (AccesoNoAutorizadoException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch (PasajeroNoValidoException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch (NullPointerException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
 
+    public static void cancelarReserva(Scanner sc, SistemaHotel gestionador_hotel)
+    {
+        System.out.printf("Ingrese Nombre Recepcionsita: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Recepcionsita: ");
+        String contraseñaRep = sc.nextLine();
 
+        int id = sc.nextInt();
+        sc.nextLine();
 
-        hotel.crearReserva(new Pasajero(dni, nombre, apellido, gmail, telefono, origen, domicilio), metodoPago.getMetodo(), numero_habitacion, fechaInicio, fechaFinal, new Recepcionista(nombreRep, contraseñaRep));
+        try
+        {
+            gestionador_hotel.cancelarReserva(id, buscarUsuario(nombreRep, contraseñaRep));
+            System.out.println("Reserva cancelada con exito");
+        }
+        catch (ReservaNoEncontradaException e)
+            {
+            System.out.println(e.getMessage());
+            }
+        catch (AccesoNoAutorizadoException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void crearCheckIn(Scanner sc, SistemaHotel gestionador_hotel)
+    {
+        System.out.printf("Ingrese Nombre Recepcionsita: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Recepcionsita: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.println("Ingrese la ID de la Reserva");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        try {
+            gestionador_hotel.realizarCheckIN(id, buscarUsuario(nombreRep, contraseñaRep));
+        } catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void crearCheckOut(Scanner sc, SistemaHotel gestionador_hotel)
+    {
+        System.out.printf("Ingrese Nombre Recepcionsita: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Recepcionsita: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.println("Ingrese la ID de la Reserva");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        try {
+            gestionador_hotel.realizarCheckOut(id, buscarUsuario(nombreRep, contraseñaRep));
+        } catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        } catch (HabitacionNoDisponibleException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void guardarUsuarioEnJSON(Usuario u) {
+        String contenido = JSONUtiles.downloadJSON("ListaUsuarios");
+
+        JSONArray arr;
+
+        if (contenido == null || contenido.isEmpty()) {
+            arr = new JSONArray();
+        } else {
+            arr = new JSONArray(contenido);
+        }
+
+        JSONObject obj = new JSONObject();
+        obj.put("nombre", u.getNombre());
+        obj.put("contraseña", u.getContraseña());
+
+        if (u instanceof Administrador) {
+            obj.put("tipo", "administrador");
+        } else if (u instanceof Recepcionista) {
+            obj.put("tipo", "recepcionista");
+            obj.put("turno", ((Recepcionista) u).getTurno().toString());
+        }
+
+        arr.put(obj);
+
+        JSONUtiles.uploadJSON(arr, "ListaUsuarios");
+    }
+
+    public static void crearNuevoAdministrador(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.println("Inicie Sesion con el Usuario Administrador Autorizado");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.println("Cree el nuevo Administrador");
+        System.out.printf("Ingrese el Nuevo Nombre del Administrador: ");
+        String nombreNuevo = sc.nextLine();
+        System.out.printf("Ingrese la Nuevo Contraseña del Administrador: ");
+        String contraseñaNuevo = sc.nextLine();
+
+        try
+        {
+            Administrador adm = new Administrador(nombreNuevo, contraseñaNuevo);
+            gestionador.crearAdministrador(adm, buscarUsuario(nombreRep, contraseñaRep));
+            guardarUsuarioEnJSON(new Administrador(nombreNuevo, contraseñaNuevo));
+            System.out.println("Administrador creado exitosamente");
+        } catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        } catch (UsuarioNoValidoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void crearNuevoRecepcionista(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.println("Inicie Sesion con el Usuario Administrador Autorizado");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.println("Cree el nuevo Recepcionista");
+        System.out.printf("Ingrese el Nuevo Nombre del Recepcionista: ");
+        String nombreNuevo = sc.nextLine();
+        System.out.printf("Ingrese la Nuevo Contraseña del Recepcionista: ");
+        String contraseñaNuevo = sc.nextLine();
+
+        Turno turno = buscarTurno(sc);
+
+        try
+        {
+            Recepcionista rep = new Recepcionista(turno, nombreNuevo, contraseñaNuevo);
+            gestionador.crearRecepcionista(rep, buscarUsuario(nombreRep, contraseñaRep));
+            guardarUsuarioEnJSON(new Recepcionista(turno, nombreNuevo, contraseñaNuevo));
+            System.out.println("Recepcionista creado exitosamente");
+        } catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        } catch (UsuarioNoValidoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void eliminarUsuarioDeJSON(String nombreUsuario, String contraseñaUsuario) {
+        String contenido = JSONUtiles.downloadJSON("ListaUsuarios");
+
+        if (contenido == null || contenido.isEmpty()) {
+            return; // No hay usuarios
+        }
+
+        JSONArray arr = new JSONArray(contenido);
+        JSONArray nuevoArr = new JSONArray();
+
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject obj = arr.getJSONObject(i);
+
+            String nombre = obj.getString("nombre");
+            String contraseña = obj.getString("contraseña");
+
+            // Solo NO copio el usuario que quiero eliminar
+            if (!(nombre.equalsIgnoreCase(nombreUsuario) && contraseña.equals(contraseñaUsuario))) {
+                nuevoArr.put(obj);
+            }
+        }
+
+        JSONUtiles.uploadJSON(nuevoArr, "ListaUsuarios");
+    }
+
+    public static void eliminarUnAdministrador(Scanner sc, SistemaHotel gestionador) {
+        System.out.println("Inicie Sesion con el Usuario Administrador Autorizado");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreAdm = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaAdm = sc.nextLine();
+
+        System.out.println("Ingrese los datos de la cuenta que sera Eliminada");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreElim = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaElim = sc.nextLine();
+
+        /// Hay que proteger al unico Administrador Principal para no ser Eliminado.
+        if (identificarAdministradorPrincipal(nombreElim, contraseñaElim) == true) {
+            System.out.println("Esta prohibido eliminar al Administrador Principal. Regresando al Menu.");
+        }
+        else
+        {
+            try
+            {
+                gestionador.eliminarAdministrador(buscarUsuario(nombreAdm, contraseñaAdm), buscarUsuario(nombreElim, contraseñaElim));
+                eliminarUsuarioDeJSON(nombreElim, contraseñaElim);
+            } catch (AccesoNoAutorizadoException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (UsuarioNoValidoException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
+
+    public static void eliminarUnRecepcionista(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.println("Inicie Sesion con el Usuario Administrador Autorizado");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.println("Ingrese los datos de la cuenta que sera Eliminada");
+        System.out.printf("Ingrese Nombre Recepcionista: ");
+        String nombreElim = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Recepcionista: ");
+        String contraseñaElim = sc.nextLine();
+
+        try
+        {
+            gestionador.eliminarRecepcionista(buscarUsuario(nombreRep, contraseñaRep), buscarUsuario(nombreElim, contraseñaElim));
+            eliminarUsuarioDeJSON(nombreElim, contraseñaElim);
+        } catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (UsuarioNoValidoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void agregarPasajero(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.println("Inicie Sesion con el Usuario Administrador Autorizado");
+        System.out.printf("Ingrese Nombre Administrador: ");
+        String nombreRep = sc.nextLine();
+        System.out.printf("Ingrese Contraseña Administrador: ");
+        String contraseñaRep = sc.nextLine();
+
+        System.out.printf("DNI: ");
+        String dni = sc.nextLine();
+        System.out.printf("Nombre: ");
+        String nombre = sc.nextLine();
+        System.out.printf("Apellido: ");
+        String apellido = sc.nextLine();
+        System.out.printf("Correo: ");
+        String gmail = sc.nextLine();
+        System.out.printf("Telefono: ");
+        String telefono = sc.nextLine();
+        System.out.printf("Origen: ");
+        String origen = sc.nextLine();
+        System.out.printf("Domicilio: ");
+        String domicilio = sc.nextLine();
+
+        try
+        {
+            gestionador.agregarPasajero(new Pasajero(dni, nombre, apellido, gmail, telefono, origen, domicilio), buscarUsuario(nombreRep, contraseñaRep));
+        }
+        catch (AccesoNoAutorizadoException e) {
+            System.out.println(e.getMessage());
+        } catch (PasajeroNoValidoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static String buscarPasajero(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.printf("DNI: ");
+        String dni = sc.nextLine();
+
+        if(gestionador.buscarPasajero(dni) != null)
+        {
+            return null;
+        }
+         return gestionador.buscarPasajero(dni).toString();
+    }
+
+    public static String recaudacionTotal(SistemaHotel gestionador)
+    {
+        String contenido = "El total recaudado es de " + gestionador.calcularRecaudacionTotal() + "$";
+        return contenido;
+    }
+
+    public static void agregarHabitacion(Scanner sc, SistemaHotel gestionador)
+    {
+        System.out.printf("Numero de Habitaicon");
+        int numHabitacion = sc.nextInt();
+        sc.nextLine();
+
+        TipoHabitacion tipo = null;
+        boolean existenciaNumero = false;
+        while (existenciaNumero == false)
+        {
+            System.out.println("Que tipo de Habitacion es");
+            System.out.println("1. Estandar");
+            System.out.println("2. Estandar Plus");
+            System.out.println("3. Suit");
+            int opciones = sc.nextInt();
+            sc.nextLine();
+            switch (opciones)
+            {
+                case 1:
+                    tipo =  TipoHabitacion.ESTANDAR;
+                    break;
+                    case 2:
+                    tipo =  TipoHabitacion.ESTANDARPLUS;
+                    break;
+                    case 3:
+                        tipo =  TipoHabitacion.SUIT;
+                        break;
+                        default:
+                            System.out.println("Ocurrio un error, numero no ingresado correctamente.");
+            }
+
+            if(opciones == 1 || opciones == 2 || opciones == 3)
+            {
+                existenciaNumero = true;
+            }
+
+        }
+
+        EstadoHabitacion estado = null;
+        boolean existenciaEstado = false;
+        while (existenciaEstado == false)
+        {
+            System.out.println("En que estado se encuentra la Habitaicon");
+            System.out.println("1. Ocupado");
+            System.out.println("2. Libre");
+            System.out.println("3. Reservado");
+            System.out.println("4. Mantenimiento");
+            int opciones = sc.nextInt();
+            sc.nextLine();
+            switch (opciones)
+            {
+                case 1:
+                    estado =  EstadoHabitacion.OCUPADA;
+                    break;
+                case 2:
+                    estado =  EstadoHabitacion.LIBRE;
+                    break;
+                case 3:
+                    estado = EstadoHabitacion.RESERVADA;
+                    break;
+                case 4:
+                    estado = EstadoHabitacion.MANTENIMIENTO;
+                    break;
+                default:
+                    System.out.println("Ocurrio un error, numero no ingresado correctamente.");
+            }
+
+            if(opciones == 1 || opciones == 2 || opciones == 3 || opciones == 4)
+            {
+                existenciaEstado = true;
+            }
+
+        }
+
+        System.out.printf("Ingrese el Precio x Noche: ");
+        double precioXNoche = sc.nextDouble();
+        sc.nextLine();
+
+        gestionador.crearHabitacion(new Habitacion(numHabitacion, tipo, estado, precioXNoche));
+    }
+
+    public static void serializar(Scanner sc, SistemaHotel gestionador)
+    {
+        String archivo = sc.nextLine();
+        gestionador.guardarHotel(archivo);
+    }
+
+    public static void deserealizar(Scanner sc, SistemaHotel gestionador) {
+        gestionador.cargarHotel("DataHotel");
+
+        JSONObject obj = new JSONObject(JSONUtiles.downloadJSON("DataHotel"));
+        JSONArray usuarios = obj.getJSONArray("usuarios");
+
+        JSONArray arrayFinal = new JSONArray();
+
+        for (int i = 0; i < usuarios.length(); i++) {
+            JSONObject usuario = usuarios.getJSONObject(i);
+
+            JSONObject copia = new JSONObject();
+            copia.put("tipo", usuario.getString("tipo"));
+            copia.put("nombre", usuario.getString("nombre"));
+            copia.put("contraseña", usuario.getString("contraseña"));
+
+            if (usuario.getString("tipo").equalsIgnoreCase("recepcionista")) {
+                copia.put("turno", usuario.getString("turno"));
+            }
+
+            arrayFinal.put(copia);
+        }
+
+        JSONUtiles.uploadJSON(arrayFinal, "ListaUsuarios");
     }
 }

@@ -1,0 +1,19 @@
+[
+    {
+        "tipo": "administrador",
+        "id": 1,
+        "nombre": "ThePaulosRucks007",
+        "contraseña": "dinosaurio123roar"
+    },
+    {
+        "tipo": "administrador",
+        "nombre": "PauloJunior123",
+        "contraseña": "monolizo123"
+    },
+    {
+        "tipo": "recepcionista",
+        "turno": "MAÑANA",
+        "nombre": "MamaPaulo953",
+        "contraseña": "pop403er"
+    }
+]

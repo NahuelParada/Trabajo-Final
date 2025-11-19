@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public abstract class Usuario implements  Identificador {
+public abstract class Usuario implements Identificador {
     /// Atributos
 
     private String nombre;
@@ -24,15 +24,6 @@ public abstract class Usuario implements  Identificador {
 
     public String getContraseña() {
         return contraseña;
-    }
-
-    public boolean iniciarSesion(String nombre, String contraseña) {
-        return this.nombre.equals(nombre) && this.contraseña.equals(contraseña);
-    }
-
-    public boolean cerrarSesion()
-    {
-        return true;
     }
 
     /// Interfaz(no se usa)

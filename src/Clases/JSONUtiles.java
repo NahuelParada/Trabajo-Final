@@ -9,7 +9,7 @@ public class JSONUtiles {
     public static void uploadJSON(JSONArray jsonArray, String archive){
         try{
             BufferedWriter salida = new BufferedWriter(new FileWriter(archive+".json"));
-            salida.write(jsonArray.toString());
+            salida.write(jsonArray.toString(4));
             salida.flush();
             salida.close();
         }catch(IOException e){
@@ -20,7 +20,7 @@ public class JSONUtiles {
     public static void uploadJSON(JSONObject jsonObject, String archive){
         try{
             BufferedWriter salida = new BufferedWriter(new FileWriter(archive+".json"));
-            salida.write(jsonObject.toString());
+            salida.write(jsonObject.toString(4));
             salida.flush();
             salida.close();
         }catch(IOException e){

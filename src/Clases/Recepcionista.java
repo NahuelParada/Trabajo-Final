@@ -14,7 +14,7 @@ public class Recepcionista extends Usuario implements Identificador {
 
     /// Constructor
 
-    public Recepcionista(Turno turno,String nombre, String contraseña) {
+    public Recepcionista(Turno turno, String nombre, String contraseña) {
         super(nombre,contraseña);
         this.id = contador++;
         this.turno = turno;

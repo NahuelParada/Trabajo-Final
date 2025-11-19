@@ -48,6 +48,10 @@ public class SistemaHotel {
 
         Habitacion hab = hotel.buscarHabitacionPorNumero(numHab);
 
+        if(!(u instanceof Recepcionista)){
+            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede realizar una reserva");
+        }
+
         /// Comprobacion fechas
         if (fechaInicio.isBefore(fechaActual)) {
             throw new IllegalArgumentException("La fecha de inicio no puede ser anterior a hoy");
@@ -77,6 +81,7 @@ public class SistemaHotel {
 
         return r;
     }
+
 
     public boolean cancelarReserva(int id, Usuario u)throws ReservaNoEncontradaException, AccesoNoAutorizadoException {
         Reserva r = hotel.buscarReserva(id);
@@ -119,6 +124,7 @@ public class SistemaHotel {
     }
 
     /// USUARIOS
+
     public boolean crearAdministrador(Administrador admin, Usuario u) throws AccesoNoAutorizadoException, UsuarioNoValidoException{
         /// Compruebo que el usuario que hace la accion es un admin
         if(!(u instanceof Administrador)){
