@@ -1,5 +1,6 @@
 package Clases;
 
+import Enums.EstadoHabitacion;
 import Enums.MetodoPago;
 
 import javax.swing.text.html.HTMLDocument;
@@ -74,7 +75,7 @@ public class Hotel {
     public String listarHabitacionesDisponibles() {
         StringBuilder habDisponible = new StringBuilder();
         for(Habitacion h : habitaciones){
-            if(h.disponibleParaReserva()){
+            if(h.getEstado() == EstadoHabitacion.LIBRE){
                 habDisponible.append(h.toString()).append("\n");
             }
         }
@@ -84,7 +85,7 @@ public class Hotel {
     public String listarHabitacionesNoDisponibles() {
         StringBuilder habNoDisponible = new StringBuilder();
         for(Habitacion h : habitaciones){
-            if(h.ocupadaParaCheckOut() || h.disponibleParaCheckIn()){
+            if(h.getEstado() == EstadoHabitacion.OCUPADA || h.getEstado() == EstadoHabitacion.RESERVADA){
                 habNoDisponible.append(h.toString()).append("\n");
             }
         }
@@ -102,4 +103,32 @@ public class Hotel {
     public boolean eliminarReserva(Reserva reserva){
         return reservas.eliminarRegistro(reserva);
     }
+
+
+    public boolean hacerCheckIn(int id) {
+        Reserva r = buscarReserva(id);
+        r.setEstadoHabitacionReserva(EstadoHabitacion.OCUPADA);
+        return true;
+    }
+
+    public boolean hacerCheckOut(int id) {
+        Reserva r = buscarReserva(id);
+        Habitacion h = r.getHabitacion();
+        if(h.getEstado() == EstadoHabitacion.OCUPADA) {
+            r.setEstadoHabitacionReserva(EstadoHabitacion.MANTENIMIENTO);
+            return true;
+        }
+        return false;
+    }
+
+    public double calcularRecaudacionTotalEnReservas() {
+        double total = 0;
+        for(Reserva r : reservas){
+             total += r.calcularCosto();
+
+        }
+        return total;
+    }
+
+
 }

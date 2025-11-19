@@ -48,6 +48,10 @@ public class Reserva implements Identificador {
         return noches * habitacion.getPrecioXNoche();
     }
 
+    public void setEstadoHabitacionReserva(EstadoHabitacion estadoHabitacion) {
+        habitacion.setEstado(estadoHabitacion);
+    }
+
     ///Equals & Hashcode
 
     @Override

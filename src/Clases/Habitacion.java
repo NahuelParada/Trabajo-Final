@@ -26,37 +26,12 @@ public class Habitacion implements Identificador {
         return estado;
     }
 
-    public void setEstado(EstadoHabitacion estado) {
-        this.estado = estado;
-    }
+    public void setEstado(EstadoHabitacion estado) {    this.estado = estado;}
 
     public double getPrecioXNoche() {
         return precioXNoche;
     }
 
-    public void setPrecioXNoche(double precioXNoche) {
-        this.precioXNoche = precioXNoche;
-    }
-
-    public TipoHabitacion getTipo() {
-        return tipo;
-    }
-
-    public int getNumHabitacion() {
-        return numHabitacion;
-    }
-
-    public boolean disponibleParaReserva() {
-        return estado == EstadoHabitacion.LIBRE;
-    }
-
-    public boolean disponibleParaCheckIn() {
-        return estado == EstadoHabitacion.RESERVADA;
-    }
-
-    public boolean ocupadaParaCheckOut() {
-        return estado == EstadoHabitacion.OCUPADA;
-    }
 
     /// Interfaz
 

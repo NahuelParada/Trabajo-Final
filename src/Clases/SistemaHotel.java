@@ -53,12 +53,8 @@ public class SistemaHotel {
             throw new NullPointerException("Habitacion no encontrada");
         }
         /// Compruebo estado de la habitacion
-        if (!hab.disponibleParaReserva()) {
+        if (hab.getEstado() != EstadoHabitacion.LIBRE) {
             throw new HabitacionNoDisponibleException("Habitacion no disponible( estado :" + hab.getEstado() + ")");
-        }
-        /// Compruebo si el usuario sea un recepcionista
-        if (!(u instanceof Recepcionista)) {
-            throw new AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
         }
 
         Reserva r = new Reserva(pago, fechaInicio, fechaFin, p, hab);
@@ -77,52 +73,35 @@ public class SistemaHotel {
         }
         /// Compruebo si el usuario sea un recepcionista
         if(!(u instanceof Recepcionista)){
-            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
+            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede cancelar reservas");
         }
 
-        r.getHabitacion().setEstado(EstadoHabitacion.LIBRE);
+        r.setEstadoHabitacionReserva(EstadoHabitacion.RESERVADA);
         return hotel.eliminarReserva(r);
     }
 
     /// CheckIn & CheckOut
 
-    public boolean realizarCheckIN (int idReserva ,Usuario u) throws ReservaNoEncontradaException, AccesoNoAutorizadoException, HabitacionNoDisponibleException {
-        Reserva r = hotel.buscarReserva(idReserva);
-        /// Compruebo si la reserva existe
-        if (r == null) {
-            throw new ReservaNoEncontradaException("La reserva con ID " + idReserva + " no existe.");
-        }
+    public boolean realizarCheckIN (int idReserva ,Usuario u) throws AccesoNoAutorizadoException{
         /// Compruebo si el usuario sea un recepcionista
         if(!(u instanceof Recepcionista)){
-            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
+            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede realizar CheckIns");
         }
-        /// Compruebo si la habitacion esta reservada
-        if(!r.getHabitacion().disponibleParaCheckIn()){
-            throw new HabitacionNoDisponibleException("Habitacion no disponible");
-        }
-
-        r.getHabitacion().setEstado(EstadoHabitacion.OCUPADA);
+        hotel.hacerCheckIn(idReserva);
         return true;
     }
-/*
-    public boolean realizarCheckOut(int idReserva, Usuario u) throws ReservaNoEncontradaException, AccesoNoAutorizadoException, HabitacionNoDisponibleException {
-        Reserva r = hotel.getReservas().buscarPorNumero(idReserva);
 
-        /// Compruebo si la reserva existe
-        if (r == null) {
-            throw new ReservaNoEncontradaException("La reserva con ID " + idReserva + " no existe.");
-        }
+    public boolean realizarCheckOut(int idReserva, Usuario u) throws AccesoNoAutorizadoException, HabitacionNoDisponibleException{
 
         /// Compruebo si el usuario sea un recepcionista
         if(!(u instanceof Recepcionista)){
-            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede crear reservas");
+            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede realizar CheckOuts");
         }
-        /// Compruebo si la habitacion esta ocupada
-        if(!r.getHabitacion().ocupadaParaCheckOut()){
-            throw new HabitacionNoDisponibleException("La habitacion esta liberada");
+        /// Compruebo si la habitacion esta ocupada antes de hacer CheckOut
+        if(!hotel.hacerCheckOut(idReserva)){
+            throw new HabitacionNoDisponibleException("La habitacion no esta ocupada");
         }
 
-        r.getHabitacion().setEstado(EstadoHabitacion.MANTENIMIENTO); ///Mas tarde se pondra libre
         return true;
     }
 
@@ -167,7 +146,7 @@ public class SistemaHotel {
         }
 
 
-        return hotel.getUsuarios().eliminarRegistro(RecepcionistaAeliminar);
+        return hotel.eliminarUsuario(RecepcionistaAeliminar);
     }
 
     public boolean eliminarAdministrador(Usuario u1, Usuario AdminAEliminar) throws AccesoNoAutorizadoException, UsuarioNoValidoException {
@@ -184,21 +163,29 @@ public class SistemaHotel {
             throw new UsuarioNoValidoException("El usuario que ingreso es nulo");
         }
 
-        return hotel.getUsuarios().eliminarRegistro(AdminAEliminar);
+        return hotel.eliminarUsuario(AdminAEliminar);
     }
 
     /// PASAJEROS
-    public boolean agregarPasajero(Pasajero p)throws PasajeroNoValidoException {
+    public boolean agregarPasajero(Pasajero p, Usuario u)throws PasajeroNoValidoException, AccesoNoAutorizadoException {
         /// Comprobar de que el pasajero no sea nulo
         if(p == null){
             throw new PasajeroNoValidoException("El pasajero que ingreso es nulo");
         }
+        /// Compruebo si el usuario sea un recepcionista
+        if(!(u instanceof Recepcionista)){
+            throw new  AccesoNoAutorizadoException("Solo un recepcionista puede agregar pasajeros");
+        }
 
         return hotel.agregarPasajero(p);
     }
-    /// CONSULTAR MAÑANA SOBRE GETTERS EN LA CLASE HOTEL SI ROMPE EL ENCAPSULAMIENTO
+
     public Pasajero buscarPasajero(String dni) {
-        return hotel.getPasajeros().buscarPorNumero(Integer.parseInt(dni));
+        return hotel.buscarPasajero(dni);
     }
-*/
+
+    public double calcularRecaudacionTotal() {
+        return hotel.calcularRecaudacionTotalEnReservas();
+    }
+
 }
