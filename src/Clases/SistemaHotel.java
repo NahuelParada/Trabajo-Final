@@ -34,6 +34,7 @@ public class SistemaHotel {
             throw new NullPointerException("Datos no encontrados");
         }
 
+
         hotel.agregarHabitacion(hab);
         return hab;
     }
